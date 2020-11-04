@@ -9,17 +9,20 @@
             android:checkableBehavior="single">
             <item
                 android:id="@+id/nav_home"
-                android:title="@string/menu_notes" />
+                android:title="@string/menu_notes"
+                android:icon="@drawable/ic_baseline_sticky_note_2_24"/>
             <item
                 android:id="@+id/nav_gallery"
-                android:title="@string/menu_reminders" />
+                android:title="@string/menu_reminders"
+                android:icon="@drawable/ic_baseline_add_alert_24"/>
         </group>
         <group
             android:id="@+id/menu_bottom"
             android:checkableBehavior="single">
             <item
                 android:id="@+id/nav_slideshow"
-                android:title="@string/menu_about" />
+                android:title="@string/menu_about"
+                android:icon="@drawable/ic_baseline_info_24" />
         </group>
 
     </group>
