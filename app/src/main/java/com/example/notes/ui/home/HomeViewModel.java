@@ -1,16 +1,16 @@
-package com.example.notes.ui.about;
+package com.example.notes.ui.home;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class AboutViewModel extends ViewModel {
+public class HomeViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public AboutViewModel() {
+    public HomeViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        mText.setValue("This is home fragment");
     }
 
     public LiveData<String> getText() {

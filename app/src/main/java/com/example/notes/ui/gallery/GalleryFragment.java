@@ -1,4 +1,4 @@
-package com.example.notes.ui.notes;
+package com.example.notes.ui.gallery;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.notes.R;
 
-public class NotesFragment extends Fragment {
+public class GalleryFragment extends Fragment {
 
-    private NotesViewModel notesViewModel;
+    private GalleryViewModel galleryViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notesViewModel =
-                ViewModelProviders.of(this).get(NotesViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        notesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        galleryViewModel =
+                ViewModelProviders.of(this).get(GalleryViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
+        final TextView textView = root.findViewById(R.id.text_gallery);
+        galleryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

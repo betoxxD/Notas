@@ -1,8 +1,6 @@
 package com.example.notes;
 
 import android.os.Bundle;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 
@@ -47,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        
     }
 
     @Override
@@ -63,10 +60,4 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
-    public void openSearchDialog(MenuItem item) {
-        onSearchRequested();
-    }
-
-
 }

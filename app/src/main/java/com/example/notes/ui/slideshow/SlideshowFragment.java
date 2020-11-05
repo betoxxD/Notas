@@ -1,4 +1,4 @@
-package com.example.notes.ui.reminder;
+package com.example.notes.ui.slideshow;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.notes.R;
 
-public class ReminderFragment extends Fragment {
+public class SlideshowFragment extends Fragment {
 
-    private ReminderViewModel reminderViewModel;
+    private SlideshowViewModel slideshowViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        reminderViewModel =
-                ViewModelProviders.of(this).get(ReminderViewModel.class);
+        slideshowViewModel =
+                ViewModelProviders.of(this).get(SlideshowViewModel.class);
         View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
         final TextView textView = root.findViewById(R.id.text_slideshow);
-        reminderViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
