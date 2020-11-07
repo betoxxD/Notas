@@ -9,21 +9,46 @@ import androidx.annotation.Nullable;
 public class DB extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "dbNotes";
     public static  final int DATABASE_VERSION = 1;
-    // Reminders table
-    public static final String TABLE_REMINDERS_NAME = "reminders";
-    public static final String[] COLUMS_TABLEREMINDERS = {
-            "id", "title", "information","finishDate","idRemindersDate"
+    // Notes table
+    public static final String TABLE_NOTES_NAME = "notes";
+    public static final String[] COLUMS_TABLENOTES = {
+            "id", "title", "description","isReminder","finishDate"
     };
-    public static final String SCRIPT_TABLE_REMINDERS=
-            "create table reminders(" +
-                    "id integer primary key autoincrement," +
-                    "title text not null," +
-                    "information text not null," +
-                    "finishDate text not null," +
-                    "idRemindersDate int" +
-                    ");";
+    public static final String SCRIPT_TABLE_NOTES=
+           "create table notes(\n" +
+                   "   id integer primary key autoincrement NOT NULL,\n" +
+                   "   title text not null,\n" +
+                   "   description text not null,\n" +
+                   "   isReminder INTEGER NOT NULL,\n" +
+                   "   finishDate text\n" +
+                   ");";
 
-    // Notes
+    // remindersDate
+    public static final String TABLE_REMINDERS_DATE = "remindersDate";
+    public static final String [] COLUMS_TABLEREMINDERSDATE = {
+            "id","idNote","dateReminder"
+    };
+    public static final String SCRIPT_TABLE_REMINDERS_DATE =
+            " CREATE TABLE remindersDate(\n" +
+                    "   id INTEGER PRIMARY KEY autoincrement NOT NULL,\n" +
+                    "   idNote integer NOT NULL,\n" +
+                    "   dateReminder TEXT NOT NULL,\n" +
+                    "   FOREIGN KEY(idNote) REFERENCES Notes(id)\n" +
+                    " );";
+
+    // Files
+    public static final String TABLE_FILES = "files";
+    public  static final String[] COLUMNS_TABLEFILES = {
+            "id","idNote","source","type"
+    };
+    public static final String SCRIPT_TABLE_FILES =
+            "CREATE TABLE files (\n" +
+                    "  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                    "  idNote INTEGER NOT NULL,\n" +
+                    "  source TEXT NOT NULL,\n" +
+                    "  type TEXT NOT NULL,\n" +
+                    "  FOREIGN KEY(idNote) REFERENCES Notes(id)\n" +
+                    ");";
 
     Context context;
 
@@ -36,7 +61,9 @@ public class DB extends SQLiteOpenHelper {
     // Place to execute te SQLite code
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SCRIPT_TABLE_REMINDERS);
+        db.execSQL(SCRIPT_TABLE_NOTES);
+        db.execSQL(SCRIPT_TABLE_FILES);
+        db.execSQL(SCRIPT_TABLE_REMINDERS_DATE);
     }
 
     @Override
