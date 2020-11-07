@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.View;
 
 import com.example.notes.R;
+import com.example.notes.ui.pikers.DatePickerFragment;
 import com.example.notes.ui.pikers.TimePickerFragment;
 
 public class NotesActivity extends AppCompatActivity {
@@ -36,6 +37,10 @@ public class NotesActivity extends AppCompatActivity {
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
     @Override
