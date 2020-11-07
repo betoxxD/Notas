@@ -2,11 +2,13 @@ package com.example.notes;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 
+import com.example.notes.ui.NoteActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -34,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                openNotes(view);
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -70,5 +71,11 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+    public  void openNotes(View view){
+        setContentView(R.layout.activity_notes);
+        Intent intent = new Intent(this, NoteActivity.class);
+        startActivity(intent);
+
     }
 }

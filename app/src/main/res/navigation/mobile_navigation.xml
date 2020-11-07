@@ -9,7 +9,7 @@
         android:id="@+id/nav_home"
         android:name="com.example.notes.ui.notes.NotesFragment"
         android:label="@string/menu_notes"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_notes" />
 
     <fragment
         android:id="@+id/nav_gallery"
