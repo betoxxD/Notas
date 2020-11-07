@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.Menu;
 
 import com.example.notes.ui.NoteActivity;
+import com.example.notes.ui.NotesActivity;
+import com.example.notes.ui.pikers.TimePickerFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.DialogFragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -72,10 +74,16 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
     public  void openNotes(View view){
         setContentView(R.layout.activity_notes);
-        Intent intent = new Intent(this, NoteActivity.class);
+        Intent intent = new Intent(this, NotesActivity.class);
         startActivity(intent);
 
+    }
+
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 }

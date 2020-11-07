@@ -21,13 +21,13 @@ public class DaoReminders {
     }
 
     public Cursor getAllCursor(){
-        Cursor cursor = ad.query(DB.TABLE_REMINDERS_NAME, DB.COLUMS_TABLEREMINDERS,null,null,null,null,null,null);
+        Cursor cursor = ad.query(DB.TABLE_NOTES_NAME, DB.COLUMS_TABLENOTES,null,null,null,null,null,null);
         return cursor;
     }
 
     public ArrayList<Reminders> getAll(){
         ArrayList<Reminders> lst = new ArrayList<>();
-        Cursor cursor = ad.query(DB.TABLE_REMINDERS_NAME,DB.COLUMS_TABLEREMINDERS,null,null,null,null,null,null);
+        Cursor cursor = ad.query(DB.TABLE_NOTES_NAME, DB.COLUMS_TABLENOTES,null,null,null,null,null,null);
         if(cursor.getCount() >= 0){
             while (cursor.moveToNext()){
                 lst.add(new Reminders(
