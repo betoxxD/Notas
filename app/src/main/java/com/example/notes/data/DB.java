@@ -22,6 +22,9 @@ public class DB extends SQLiteOpenHelper {
                     "finishDate text not null," +
                     "idRemindersDate int" +
                     ");";
+
+    // Notes
+
     Context context;
 
     // DB creation

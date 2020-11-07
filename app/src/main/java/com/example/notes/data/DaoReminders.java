@@ -31,7 +31,7 @@ public class DaoReminders {
         if(cursor.getCount() >= 0){
             while (cursor.moveToNext()){
                 lst.add(new Reminders(
-                        cursor.getInt(0),cursor.getString(1),cursor.getString(2),new ArrayList<String>(),cursor.getString(4)
+                        cursor.getInt(0),cursor.getString(1),cursor.getString(2),new ArrayList<String>(),cursor.getString(3)
                 ));
             }
         }
