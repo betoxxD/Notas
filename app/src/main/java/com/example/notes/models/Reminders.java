@@ -4,15 +4,26 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Reminders {
+    int id;
     String title;
     String content;
     ArrayList<String []> images;
     ArrayList<String []> video;
-    ArrayList<String> audio;
+    ArrayList<String []> audio;
     ArrayList<String> dateReminders;
     String finishDate;
 
-    public Reminders(String title, String content, ArrayList<String[]> images, ArrayList<String[]> video, ArrayList<String> audio, ArrayList<String> dateReminders, String finishDate) {
+
+    public Reminders(int id, String title, String content, ArrayList<String> dateReminders, String finishDate) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.dateReminders = dateReminders;
+        this.finishDate = finishDate;
+    }
+
+    public Reminders(int id, String title, String content, ArrayList<String[]> images, ArrayList<String[]> video, ArrayList<String[]> audio, ArrayList<String> dateReminders, String finishDate) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.images = images;
@@ -54,11 +65,11 @@ public class Reminders {
         this.video = video;
     }
 
-    public ArrayList<String> getAudio() {
+    public ArrayList<String[]> getAudio() {
         return audio;
     }
 
-    public void setAudio(ArrayList<String> audio) {
+    public void setAudio(ArrayList<String[]> audio) {
         this.audio = audio;
     }
 
