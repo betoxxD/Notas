@@ -8,8 +8,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 
-import com.example.notes.ui.NoteActivity;
 import com.example.notes.ui.NotesActivity;
+import com.example.notes.ui.RemindeActivity;
 import com.example.notes.ui.pikers.DatePickerFragment;
 import com.example.notes.ui.pikers.TimePickerFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -17,7 +17,6 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -83,7 +82,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+    public  void openReminder(View view){
+        setContentView(R.layout.activity_reminder);
+        Intent intent = new Intent(this, RemindeActivity.class);
+        startActivity(intent);
 
+    }
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
