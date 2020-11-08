@@ -16,4 +16,13 @@
     <string name="search_title">Search</string>
     <string name="add_title">Title</string>
     <string name="pick_time">pick_time</string>
+    <string name="notes_note_hint">Note</string>
+    <string name="notes_title_hint">Title</string>
+    <string name="notes_navigation_photo">Take a photo</string>
+    <string name="notes_navigation_video">Take a video</string>
+    <string name="notes_navigation_Tvideo">Take a video</string>
+    <string name="notes_navigation_Aphoto">Add a photo</string>
+    <string name="notes_navigation_Avideo">Add a video</string>
+    <string name="menu_bottom_notes_reminders">Add a reminder</string>
+    <string name="menu_bottom_notes_delete">Delete note</string>
 </resources>

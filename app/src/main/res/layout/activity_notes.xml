@@ -7,52 +7,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="668dp"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_notes"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ToolbarColoredBackArrow"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/notes_title_hint">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
-            android:layout_width="164dp"
-            android:layout_height="43dp"
-            android:layout_marginTop="56dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@string/add_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.125"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/editTextTextMultiLine"
-            android:layout_width="314dp"
-            android:layout_height="455dp"
-            android:layout_marginTop="24dp"
+            android:id="@+id/editTextNote"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="start|top"
-            android:inputType="textMultiLine"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.494"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName"
-            app:layout_constraintVertical_bias="0.019" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="48dp"
-            android:layout_marginRight="48dp"
-            android:onClick="showDatePickerDialog"
-            android:text="Button"
-            app:layout_constraintBottom_toTopOf="@+id/editTextTextMultiLine"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.717" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:hint="@string/notes_note_hint"
+            android:inputType="textMultiLine" />
+    </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -70,7 +61,6 @@
         style="@style/Widget.MaterialComponents.BottomAppBar"
         app:navigationIcon="@drawable/ic_baseline_menu_24"
         app:menu="@menu/menu_bottom_notes"
-        app:hideOnScroll="true"
-        />
+        app:hideOnScroll="true" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

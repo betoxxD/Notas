@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/notes_navigation_Tphoto"
+            android:icon="@drawable/ic_baseline_add_a_photo_24"
+            android:title="@string/notes_navigation_photo" />
+        <item
+            android:id="@+id/notes_navigation_Tvideo"
+            android:icon="@drawable/ic_baseline_video_call_24"
+            android:title="@string/notes_navigation_Tvideo" />
+        <item
+            android:id="@+id/notes_navigation_Aphoto"
+            android:icon="@drawable/ic_baseline_add_photo_alternate_24"
+            android:title="@string/notes_navigation_Aphoto" />
+        <item
+            android:id="@+id/notes_navigation_Avideo"
+            android:icon="@drawable/ic_baseline_video_library_24"
+            android:title="@string/notes_navigation_Avideo" />
+    </group>
+</menu>

@@ -3,17 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/search"
-        android:icon="@drawable/ic_baseline_search_24"
-        android:title="Buscar"
-        android:contentDescription="Ando buscando"
+        android:id="@+id/menu_bottom_notes_reminders"
+        android:icon="@drawable/ic_baseline_add_alert_24"
+        android:title="@string/menu_bottom_notes_reminders"
         app:showAsAction="ifRoom"
         />
 
     <item
-        android:id="@+id/more"
-        android:title="Mas"
-        android:contentDescription="Ando en mas"
+        android:id="@+id/menu_bottom_notes_delete"
+        android:title="@string/menu_bottom_notes_delete"
+        android:icon="@drawable/ic_baseline_delete_24"
         app:showAsAction="never"
         />
 

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.Menu;
 
 import com.example.notes.ui.NotesActivity;
-import com.example.notes.ui.RemindeActivity;
 import com.example.notes.ui.pikers.DatePickerFragment;
 import com.example.notes.ui.pikers.TimePickerFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public  void openNotes(View view){
-        setContentView(R.layout.activity_notes);
+
         Intent intent = new Intent(this, NotesActivity.class);
         startActivity(intent);
 
