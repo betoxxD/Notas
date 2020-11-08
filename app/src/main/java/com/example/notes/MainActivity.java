@@ -82,12 +82,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-    public  void openReminder(View view){
-        setContentView(R.layout.activity_reminder);
-        Intent intent = new Intent(this, RemindeActivity.class);
-        startActivity(intent);
 
-    }
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
