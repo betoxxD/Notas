@@ -7,12 +7,20 @@ public class Reminders {
     int id;
     String title;
     String content;
+    boolean isReminder;
     ArrayList<String []> images;
     ArrayList<String []> video;
     ArrayList<String []> audio;
     ArrayList<String> dateReminders;
     String finishDate;
 
+    public Reminders(int id, String title, String content, boolean isReminder, String finishDate) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.isReminder = isReminder;
+        this.finishDate = finishDate;
+    }
 
     public Reminders(int id, String title, String content, ArrayList<String> dateReminders, String finishDate) {
         this.id = id;
@@ -31,6 +39,22 @@ public class Reminders {
         this.audio = audio;
         this.dateReminders = dateReminders;
         this.finishDate = finishDate;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isReminder() {
+        return isReminder;
+    }
+
+    public void setReminder(boolean reminder) {
+        isReminder = reminder;
     }
 
     public String getTitle() {
@@ -92,8 +116,10 @@ public class Reminders {
     @Override
     public String toString() {
         return "Reminders{" +
-                "title='" + title + '\'' +
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
+                ", isReminder=" + isReminder +
                 ", images=" + images +
                 ", video=" + video +
                 ", audio=" + audio +

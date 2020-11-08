@@ -1,26 +1,71 @@
 package com.example.notes.ui.reminders;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.notes.NotesActivity;
 import com.example.notes.R;
+import com.example.notes.models.Reminders;
+import com.example.notes.ui.adapters.RemindersAdapter;
+import com.example.notes.ui.notes.NotesViewModel;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.ArrayList;
 
 public class RemindersFragment extends Fragment {
 
     private RemindersViewModel remindersViewModel;
+    private RecyclerView rvDdata;
+    private GridLayoutManager layoutManager;
+    private RemindersAdapter remindersAdapter;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-        return null;
+        remindersViewModel =
+                ViewModelProviders.of(this).get(RemindersViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_reminders, container, false);
+        View v = inflater.inflate(R.layout.fragment_reminder_selector,container,false);
+        rvDdata = (RecyclerView) v.findViewById(R.id.fragment_selector_RecyclerView);
+        layoutManager = new GridLayoutManager(getActivity(),2);
+        rvDdata.setLayoutManager(layoutManager);
+        ArrayList<Reminders> reminders = new ArrayList<>();
+        reminders = remindersViewModel.getList().getValue();
+        remindersAdapter = new RemindersAdapter(getActivity(),reminders);
+        rvDdata.setAdapter(remindersAdapter);
+        remindersAdapter.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getActivity(), "Elemento seleccionado: " + rvDdata.getChildAdapterPosition(view) , Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getActivity(), NotesActivity.class);
+                        intent.putExtra("title","Ando lavando el carro");
+                        intent.putExtra("content","Cuando lavo el carro no conozco, por eso no me baño :D");
+                        startActivity(intent);
+                    }
+                }
+        );
+        return v;
     }
 }

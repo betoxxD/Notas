@@ -1,4 +1,4 @@
-package com.example.notes.ui;
+package com.example.notes;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,23 +10,29 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.notes.BottomSheetNavigationFragment;
-import com.example.notes.R;
 import com.example.notes.ui.pikers.DatePickerFragment;
 import com.example.notes.ui.pikers.TimePickerFragment;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class NotesActivity extends AppCompatActivity {
 
     BottomAppBar bottomAppBar;
+    private TextInputEditText tieTitle;
+    private EditText etContent;
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
+        tieTitle = findViewById(R.id.activity_notes_textinputedittext);
+        etContent = findViewById(R.id.activity_notes_content);
+        id = getIntent().getIntExtra("id",-1);
         bottomAppBar = findViewById(R.id.bottomAppBarNotes);
         bottomAppBar.replaceMenu(R.menu.menu_bottom_notes);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar_notes);
@@ -37,6 +43,7 @@ public class NotesActivity extends AppCompatActivity {
         myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                addNote();
                 finish();
             }
         });
@@ -46,6 +53,7 @@ public class NotesActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        addNote();
         finish();
     }
 
@@ -94,7 +102,7 @@ public class NotesActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.search:
+                    case R.id.menu_bottom_notes_reminders:
                         Toast.makeText(NotesActivity.this, "Search.", Toast.LENGTH_SHORT).show();
                         break;
                 }
@@ -121,5 +129,11 @@ public class NotesActivity extends AppCompatActivity {
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), "Bottom Sheet Dialog Fragment");
             }
         });
+
+    }
+    private void addNote () {
+        if(id == -1){
+
+        }
     }
 }

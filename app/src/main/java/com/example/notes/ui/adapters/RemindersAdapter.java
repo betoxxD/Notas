@@ -17,7 +17,7 @@ import com.example.notes.models.Reminders;
 import java.util.ArrayList;
 
 
-public class remindersAdapter extends RecyclerView.Adapter<remindersAdapter.ViewHolder> {
+public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.ViewHolder> {
 
     private ArrayList<Reminders> listReminders;
     private Context context;
@@ -26,6 +26,10 @@ public class remindersAdapter extends RecyclerView.Adapter<remindersAdapter.View
 
     public void setOnClickListener (View.OnClickListener onClickListener){
         this.onClickListener = onClickListener;
+    }
+
+    public RemindersAdapter() {
+        // Required empty public constructor
     }
 
     @Override
@@ -48,7 +52,7 @@ public class remindersAdapter extends RecyclerView.Adapter<remindersAdapter.View
         return new ViewHolder(v);
     }
 
-    public remindersAdapter(Context context, ArrayList<Reminders> listReminders){
+    public RemindersAdapter(Context context, ArrayList<Reminders> listReminders){
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.listReminders = listReminders;
         this.context = context;

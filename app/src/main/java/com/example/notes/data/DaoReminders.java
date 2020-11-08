@@ -1,5 +1,6 @@
 package com.example.notes.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,6 +19,15 @@ public class DaoReminders {
         this.context = ctx;
         db = new DB(ctx);
         ad = db.getWritableDatabase();
+    }
+
+    public long insertReminder (Reminders reminders){
+        ContentValues cv = new ContentValues();
+        cv.put(DB.COLUMS_TABLENOTES[1],reminders.getTitle());
+        cv.put(DB.COLUMS_TABLENOTES[2],reminders.getContent());
+        cv.put(DB.COLUMS_TABLENOTES[3],reminders.isReminder());
+        cv.put(DB.COLUMS_TABLENOTES[4],reminders.getFinishDate());
+        return  ad.insert(DB.TABLE_REMINDERS_DATE,null,cv);
     }
 
     public Cursor getAllCursor(){

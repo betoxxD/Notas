@@ -8,7 +8,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 
-import com.example.notes.ui.NotesActivity;
 import com.example.notes.ui.pikers.DatePickerFragment;
 import com.example.notes.ui.pikers.TimePickerFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
