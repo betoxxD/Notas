@@ -25,4 +25,6 @@
     <string name="notes_navigation_Avideo">Add a video</string>
     <string name="menu_bottom_notes_reminders">Add a reminder</string>
     <string name="menu_bottom_notes_delete">Delete note</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
