@@ -42,14 +42,10 @@ public class RemindersFragment extends Fragment {
 
     }
 
-    public DaoReminders getDaoReminders(){
-        return new DaoReminders(getActivity().getApplicationContext());
-    }
-
     private ArrayList<Reminders> getReminders (){
         ArrayList<Reminders> reminders = new ArrayList<>();
         DaoReminders daoReminders = new DaoReminders(getActivity().getApplicationContext());
-        reminders = daoReminders.getAll();
+        reminders = daoReminders.getAllReminders();
         return reminders;
     }
 

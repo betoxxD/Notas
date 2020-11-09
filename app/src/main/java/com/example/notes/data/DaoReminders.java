@@ -30,9 +30,17 @@ public class DaoReminders {
         return  ad.insert(DB.TABLE_NOTES_NAME,null,cv);
     }
 
-    public Cursor getAllCursor(){
-        Cursor cursor = ad.query(DB.TABLE_NOTES_NAME, DB.COLUMS_TABLENOTES,null,null,null,null,null,null);
-        return cursor;
+    public ArrayList<Reminders> getAllReminders(){
+        Cursor cursor = ad.rawQuery("select * from "+DB.TABLE_NOTES_NAME + " where isReminder = ?",new String[]{String.valueOf(1)});
+        ArrayList<Reminders> reminders = new ArrayList<>();
+        if(cursor.getCount() >= 0){
+            while (cursor.moveToNext()){
+                reminders.add(new Reminders(
+                        cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getInt(3),cursor.getString(4)
+                ));
+            }
+        }
+        return reminders;
     }
 
     public ArrayList<Reminders> getAll(){
@@ -59,7 +67,7 @@ public class DaoReminders {
                         cursor.getInt(0),
                         cursor.getString(1),
                         cursor.getString(2),
-                        Boolean.parseBoolean(cursor.getInt(3)+""),
+                        cursor.getInt(3),
                         cursor.getString(4)
                 );
             }

@@ -6,6 +6,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -116,9 +118,17 @@ public class NotesActivity extends AppCompatActivity {
                         Toast.makeText(NotesActivity.this, "Reminder.", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.menu_bottom_notes_delete:
-                        daoReminders.delete(id);
-                        Toast.makeText(NotesActivity.this, "Eliminado correctamente.", Toast.LENGTH_SHORT).show();
-                        finish();
+                        new AlertDialog.Builder(NotesActivity.this)
+                                .setTitle("Delete")
+                                .setMessage("Are you sure to delete this note?")
+                                .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                daoReminders.delete(id);
+                                Toast.makeText(NotesActivity.this, "Eliminado correctamente.", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        }).setNegativeButton("Cancel",null).show();
                         break;
                 }
                 return false;
@@ -157,7 +167,7 @@ public class NotesActivity extends AppCompatActivity {
             finish();
         } else {
             if (id == -1) {
-                reminder = new Reminders(title, content, true, "FechaRandom");
+                reminder = new Reminders(title, content, 0, "FechaRandom");
                 DaoReminders daoReminders = new DaoReminders(getApplicationContext());
                 if (daoReminders.insertReminder(reminder) != -1) {
                     Toast.makeText(NotesActivity.this, "Nota agregada correctamente", Toast.LENGTH_SHORT).show();
