@@ -115,6 +115,11 @@ public class NotesActivity extends AppCompatActivity {
                     case R.id.menu_bottom_notes_reminders:
                         Toast.makeText(NotesActivity.this, "Reminder.", Toast.LENGTH_SHORT).show();
                         break;
+                    case R.id.menu_bottom_notes_delete:
+                        daoReminders.delete(id);
+                        Toast.makeText(NotesActivity.this, "Eliminado correctamente.", Toast.LENGTH_SHORT).show();
+                        finish();
+                        break;
                 }
                 return false;
             }

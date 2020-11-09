@@ -79,4 +79,8 @@ public class DaoReminders {
                 new String[]{String.valueOf(reminder.getId())}
         )>0;
     }
+
+    public boolean delete(long id){
+        return ad.delete(DB.TABLE_NOTES_NAME,"id=?", new String[]{String.valueOf(id)})>0;
+    }
 }
