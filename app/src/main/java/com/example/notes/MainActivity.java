@@ -10,11 +10,14 @@ import android.view.Menu;
 
 import com.example.notes.ui.pikers.DatePickerFragment;
 import com.example.notes.ui.pikers.TimePickerFragment;
+import com.example.notes.ui.reminders.RemindersFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -75,10 +78,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public  void openNotes(View view){
-
         Intent intent = new Intent(this, NotesActivity.class);
-        startActivity(intent);
-
+        startActivityForResult(intent,1001);
     }
 
     public void showTimePickerDialog(View v) {
@@ -88,5 +89,15 @@ public class MainActivity extends AppCompatActivity {
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1001){
+            if(resultCode == RESULT_OK){
+
+            }
+        }
     }
 }

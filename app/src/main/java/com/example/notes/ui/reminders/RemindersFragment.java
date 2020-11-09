@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notes.NotesActivity;
 import com.example.notes.R;
+import com.example.notes.data.DaoReminders;
 import com.example.notes.models.Reminders;
 import com.example.notes.ui.adapters.RemindersAdapter;
 import com.example.notes.ui.notes.NotesViewModel;
@@ -41,6 +42,17 @@ public class RemindersFragment extends Fragment {
 
     }
 
+    public DaoReminders getDaoReminders(){
+        return new DaoReminders(getActivity().getApplicationContext());
+    }
+
+    private ArrayList<Reminders> getReminders (){
+        ArrayList<Reminders> reminders = new ArrayList<>();
+        DaoReminders daoReminders = new DaoReminders(getActivity().getApplicationContext());
+        reminders = daoReminders.getAll();
+        return reminders;
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         remindersViewModel =
@@ -51,21 +63,24 @@ public class RemindersFragment extends Fragment {
         layoutManager = new GridLayoutManager(getActivity(),2);
         rvDdata.setLayoutManager(layoutManager);
         ArrayList<Reminders> reminders = new ArrayList<>();
-        reminders = remindersViewModel.getList().getValue();
+        reminders = getReminders();
         remindersAdapter = new RemindersAdapter(getActivity(),reminders);
-        rvDdata.setAdapter(remindersAdapter);
         remindersAdapter.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(getActivity(), "Elemento seleccionado: " + rvDdata.getChildAdapterPosition(view) , Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(getActivity(), NotesActivity.class);
-                        intent.putExtra("title","Ando lavando el carro");
-                        intent.putExtra("content","Cuando lavo el carro no conozco, por eso no me baño :D");
+                        intent.putExtra("id", getReminders().get(rvDdata.getChildAdapterPosition(view)).getId());
                         startActivity(intent);
                     }
                 }
         );
+        rvDdata.setAdapter(remindersAdapter);
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

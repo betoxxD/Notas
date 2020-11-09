@@ -14,6 +14,16 @@ public class Reminders {
     ArrayList<String> dateReminders;
     String finishDate;
 
+    public Reminders() {
+    }
+
+    public Reminders(String title, String content, boolean isReminder, String finishDate) {
+        this.title = title;
+        this.content = content;
+        this.isReminder = isReminder;
+        this.finishDate = finishDate;
+    }
+
     public Reminders(int id, String title, String content, boolean isReminder, String finishDate) {
         this.id = id;
         this.title = title;

@@ -27,7 +27,7 @@ public class DaoReminders {
         cv.put(DB.COLUMS_TABLENOTES[2],reminders.getContent());
         cv.put(DB.COLUMS_TABLENOTES[3],reminders.isReminder());
         cv.put(DB.COLUMS_TABLENOTES[4],reminders.getFinishDate());
-        return  ad.insert(DB.TABLE_REMINDERS_DATE,null,cv);
+        return  ad.insert(DB.TABLE_NOTES_NAME,null,cv);
     }
 
     public Cursor getAllCursor(){
@@ -46,5 +46,37 @@ public class DaoReminders {
             }
         }
         return lst;
+    }
+
+    public Reminders getOneById(long id){
+        Cursor cursor = null;
+        Reminders reminder = null;
+        cursor = ad.rawQuery("select * from "+DB.TABLE_NOTES_NAME + " where "+DB.COLUMS_TABLENOTES[0]+"=?",
+                new String[]{String.valueOf(id)});
+        if(cursor != null){
+            if(cursor.moveToFirst()){
+                reminder = new Reminders(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        Boolean.parseBoolean(cursor.getInt(3)+""),
+                        cursor.getString(4)
+                );
+            }
+        }
+        return reminder;
+    }
+
+    public boolean update(Reminders reminder){
+        ContentValues cv = new ContentValues();
+        cv.put(DB.COLUMS_TABLENOTES[1],reminder.getTitle());
+        cv.put(DB.COLUMS_TABLENOTES[2],reminder.getContent());
+        cv.put(DB.COLUMS_TABLENOTES[3],reminder.isReminder());
+        cv.put(DB.COLUMS_TABLENOTES[4], reminder.getFinishDate());
+
+        return ad.update(
+                DB.TABLE_NOTES_NAME,cv,"id=?",
+                new String[]{String.valueOf(reminder.getId())}
+        )>0;
     }
 }
