@@ -7,13 +7,17 @@ import androidx.fragment.app.DialogFragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -75,6 +79,9 @@ public class NotesActivity extends AppCompatActivity {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_bottom_notes, menu);
+        if(id == -1){
+            menu.findItem(R.id.menu_bottom_notes_delete).setVisible(false);
+        }
         return true;
     }
 
@@ -92,7 +99,15 @@ public class NotesActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
+        DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                // +1 because January is zero
+                final String selectedDate = day + " / " + (month+1) + " / " + year;
+                Toast.makeText(NotesActivity.this, selectedDate, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
@@ -115,7 +130,18 @@ public class NotesActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_bottom_notes_reminders:
-                        Toast.makeText(NotesActivity.this, "Reminder.", Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder alertDialogDateChooser = new AlertDialog.Builder(NotesActivity.this);
+                        View customView = LayoutInflater.from(NotesActivity.this).inflate(R.layout.dialog_custom_layout, null);
+                        Button btnClose = customView.findViewById(R.id.btnCloseDialog);
+                        alertDialogDateChooser.setView(customView);
+                        final AlertDialog customDialog = alertDialogDateChooser.create();
+                        customDialog.show();
+                        btnClose.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                customDialog.cancel();
+                            }
+	                    });
                         break;
                     case R.id.menu_bottom_notes_delete:
                         new AlertDialog.Builder(NotesActivity.this)

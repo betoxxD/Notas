@@ -82,15 +82,6 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent,1001);
     }
 
-    public void showTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "timePicker");
-    }
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

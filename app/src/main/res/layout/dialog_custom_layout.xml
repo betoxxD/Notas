@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/txtHeader"
+        style="@style/Widget.AppCompat.Light.ActionBar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="@string/dialog_custom_text_details"
+        android:textColor="@color/WhiteColor"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dialog_button_get_finishdate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:onClick="showDatePickerDialog"
+        android:layout_margin="4dp"
+        android:text="@string/dialog_custom_button_date"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtHeader"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dialog_button_get_finishtime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:onClick="showTimePickerDialog"
+        android:layout_margin="4dp"
+        android:text="@string/dialog_custom_button_time"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_button_get_finishdate"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCloseDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:text="@string/close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_button_get_finishtime" />
+</androidx.constraintlayout.widget.ConstraintLayout>
