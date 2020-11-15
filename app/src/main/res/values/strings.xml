@@ -31,4 +31,7 @@
     <string name="dialog_custom_button_date">Finish date</string>
     <string name="close">Close</string>
     <string name="dialog_custom_button_time">Finish time</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
 </resources>

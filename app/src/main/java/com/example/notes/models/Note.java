@@ -11,6 +11,10 @@ public class Note {
     ArrayList<String []> video;
     ArrayList<String []> audio;
 
+    public Note() {
+
+    }
+
     public Note(int id, String title, String content, int isReminder, ArrayList<String[]> images, ArrayList<String[]> video, ArrayList<String[]> audio) {
         this.id = id;
         this.title = title;

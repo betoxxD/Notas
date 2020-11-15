@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notes.R;
@@ -37,6 +38,7 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.View
         Reminders reminder = listReminders.get(position);
         holder.title.setText(reminder.getTitle());
         holder.content.setText(reminder.getContent());
+        holder.date.setText(reminder.getFinishDate());
     }
 
     @Override
@@ -60,17 +62,21 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final CardView cardView;
-        private final LinearLayout linearLayout;
+        private final ConstraintLayout constraintLayout;
         public TextView title;
         public TextView content;
+        public TextView date;
 
         public ViewHolder(View itemView)
         {
             super(itemView);
             cardView = (CardView) itemView.findViewById(R.id.reminder_selector_cardview);
-            linearLayout = (LinearLayout) itemView.findViewById(R.id.reminder_selector_linearlayout);
+            constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.reminder_selector_constraintlayout);
             title = (TextView) itemView.findViewById(R.id.reminder_selector_title);
             content = (TextView) itemView.findViewById(R.id.reminder_selector_content);
+            date = itemView.findViewById(R.id.reminder_selector_date);
+            date.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_access_alarm_14, 0, 0, 0);
+
         }
     }
 }

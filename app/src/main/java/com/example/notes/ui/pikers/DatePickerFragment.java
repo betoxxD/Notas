@@ -5,7 +5,10 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.widget.DatePicker;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.google.android.material.chip.Chip;
 
 import java.util.Calendar;
 
@@ -16,6 +19,11 @@ public class DatePickerFragment extends DialogFragment
     int month;
     int day;
     private DatePickerDialog.OnDateSetListener listener;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     public static DatePickerFragment newInstance(DatePickerDialog.OnDateSetListener listener) {
         DatePickerFragment fragment = new DatePickerFragment();

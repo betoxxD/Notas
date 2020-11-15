@@ -78,7 +78,7 @@ public class DaoNotes {
         cv.put(DB.COLUMS_TABLENOTES[1],note.getTitle());
         cv.put(DB.COLUMS_TABLENOTES[2],note.getContent());
         cv.put(DB.COLUMS_TABLENOTES[3],note.isReminder());
-
+        cv.put(DB.COLUMS_TABLENOTES[4], "");
 
         return ad.update(
                 DB.TABLE_NOTES_NAME,cv,"id=?",

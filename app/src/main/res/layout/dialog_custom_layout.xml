@@ -46,11 +46,36 @@
         app:layout_constraintTop_toBottomOf="@id/dialog_button_get_finishdate"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCloseDialog"
+        android:id="@+id/btnAcceptDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
-        android:text="@string/close"
+        android:text="@string/accept"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_button_get_finishtime" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCancelDialog"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/cancel"
+        app:layout_constraintEnd_toStartOf="@+id/btnAcceptDialog"
+        app:layout_constraintRight_toRightOf="@+id/btnAcceptDialog"
+        app:layout_constraintTop_toBottomOf="@id/dialog_button_get_finishtime" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDeleteDialog"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/delete"
+        app:layout_constraintEnd_toStartOf="@+id/btnCancelDialog"
+        app:layout_constraintRight_toRightOf="@+id/btnAcceptDialog"
         app:layout_constraintTop_toBottomOf="@id/dialog_button_get_finishtime" />
 </androidx.constraintlayout.widget.ConstraintLayout>
