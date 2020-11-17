@@ -7,7 +7,7 @@
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_selector_RecyclerView"
+        android:id="@+id/fragment_reminder_selector_RecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="1dp"

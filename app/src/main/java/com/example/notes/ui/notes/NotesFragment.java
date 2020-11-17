@@ -5,12 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,9 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.notes.NotesActivity;
 import com.example.notes.R;
 import com.example.notes.data.DaoNotes;
-import com.example.notes.data.DaoReminders;
 import com.example.notes.models.Note;
-import com.example.notes.models.Reminders;
 import com.example.notes.ui.adapters.NotesAdapter;
 
 import java.util.ArrayList;
@@ -36,9 +31,8 @@ public class NotesFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         notesViewModel =
                 ViewModelProviders.of(this).get(NotesViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notes, container, false);
         View v = inflater.inflate(R.layout.fragment_note_selector,container,false);
-        rvDdata = (RecyclerView) v.findViewById(R.id.fragment_selector_RecyclerView);
+        rvDdata = (RecyclerView) v.findViewById(R.id.fragment_reminder_selector_RecyclerView);
         layoutManager = new GridLayoutManager(getActivity(),2);
         rvDdata.setLayoutManager(layoutManager);
         ArrayList<Note> notes = new ArrayList<>();

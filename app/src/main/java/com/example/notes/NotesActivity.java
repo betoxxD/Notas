@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import androidx.work.Data;
+import androidx.work.WorkManager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,6 +14,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +30,7 @@ import com.example.notes.data.DaoNotes;
 import com.example.notes.data.DaoReminders;
 import com.example.notes.models.Note;
 import com.example.notes.models.Reminders;
+import com.example.notes.ui.WorkManagerNotify;
 import com.example.notes.ui.pikers.DatePickerFragment;
 import com.example.notes.ui.pikers.TimePickerFragment;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -34,10 +38,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 public class NotesActivity extends AppCompatActivity {
 
@@ -127,13 +133,13 @@ public class NotesActivity extends AppCompatActivity {
 
     public void showTimePickerDialog(View v) {
         final Calendar calendar = Calendar.getInstance();
-        final SimpleDateFormat dateFormatter = new SimpleDateFormat("hh:mm",Locale.US);
+        final SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm",Locale.US);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         TimePickerDialog timePickerDialog = new TimePickerDialog(NotesActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                calendar.set(Calendar.HOUR,hourOfDay);
+                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
                 calendar.set(Calendar.MINUTE,minute);
                 btnTime.setText(dateFormatter.format(calendar.getTime()));
             }
@@ -230,7 +236,7 @@ public class NotesActivity extends AppCompatActivity {
         btnDate.setText(dateFormatter.format(calendar.getTime()));
         // Finish current date
         // Set current time to button
-        final SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:ss", Locale.US);
+        final SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm", Locale.US);
         btnTime = customView.findViewById(R.id.dialog_button_get_finishtime);
         btnTime.setText(timeFormatter.format(calendar.getTime()));
         // Finish current time on button
@@ -263,6 +269,9 @@ public class NotesActivity extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(id != -1){
+                    deleteNotify(reminder.getId() + "");
+                }
                 chipDate.setText("");
                 chipDate.setVisibility(View.INVISIBLE);
                 isReminder = false;
@@ -286,6 +295,7 @@ public class NotesActivity extends AppCompatActivity {
                     reminder = new Reminders(title, content, 1, btnDate.getText() + ". " + btnTime.getText());
                     if (daoReminders.insertReminder(reminder) != -1) {
                         Toast.makeText(NotesActivity.this, "Recordatorio agregado correctamente", Toast.LENGTH_SHORT).show();
+                        saveNotify();
                         setResult(Activity.RESULT_OK, intent);
                         finish();
                     } else {
@@ -338,5 +348,47 @@ public class NotesActivity extends AppCompatActivity {
             chipDate.setVisibility(View.VISIBLE);
             chipDate.setText(reminder.getFinishDate());
         }
+    }
+
+    /**
+     * Delete the notificaiton
+     * @param tag
+     */
+    private void deleteNotify(String tag){
+        WorkManager.getInstance(this).cancelAllWorkByTag(tag);
+        Toast.makeText(this, "Para ver si se elimina", Toast.LENGTH_SHORT).show();
+    }
+
+    private String generateKey(){
+        return UUID.randomUUID().toString();
+    }
+
+    private Data saveData (String title, String content, int idNotification){
+        return new Data.Builder()
+                .putString("Title",title)
+                .putString("Content",content)
+                .putInt("id",idNotification).build();
+    }
+
+    private void saveNotify(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM, yyyy. HH:mm");
+        Date date = new Date();
+        try {
+            date = simpleDateFormat.parse(chipDate.getText().toString());
+        }catch (ParseException ex){
+            Log.v("Exception", ex.getLocalizedMessage());
+        }
+        String tag = generateKey();
+        Date justNow = new Date();
+        long alertTime = date.getTime() - justNow.getTime();
+        Data data = saveData(tieTitle.getText().toString(), etContent.getText().toString(),id);
+        WorkManagerNotify.saveNotification(alertTime,data,tag);
+
+    }
+
+    public  static Calendar toCalendar(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar;
     }
 }
