@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -17,6 +18,7 @@ import com.example.notes.R;
 import com.example.notes.data.DaoNotes;
 import com.example.notes.models.Note;
 import com.example.notes.ui.adapters.NotesAdapter;
+import com.example.notes.ui.reminders.SelectorRemindersFragment;
 
 import java.util.ArrayList;
 
@@ -26,36 +28,29 @@ public class NotesFragment extends Fragment {
     private RecyclerView rvDdata;
     private GridLayoutManager layoutManager;
     private NotesAdapter notesAdapter;
+    private SelectorNotesFragment selectorFragment;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        selectorFragment = new SelectorNotesFragment();
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.contenedor_pequenio_notes, selectorFragment).commit();
+        if ( getActivity().findViewById(R.id.contenedor_pequenio_notes) != null && getActivity().getSupportFragmentManager().findFragmentById(R.id.contenedor_pequenio_reminders) == null ){
+            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.contenedor_pequenio_notes, selectorFragment).commit();
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         notesViewModel =
                 ViewModelProviders.of(this).get(NotesViewModel.class);
-        View v = inflater.inflate(R.layout.fragment_note_selector,container,false);
-        rvDdata = (RecyclerView) v.findViewById(R.id.fragment_reminder_selector_RecyclerView);
-        layoutManager = new GridLayoutManager(getActivity(),2);
-        rvDdata.setLayoutManager(layoutManager);
-        ArrayList<Note> notes = new ArrayList<>();
-        notes = getNotes();
-        notesAdapter = new NotesAdapter(getActivity(),notes);
-        notesAdapter.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getActivity(), NotesActivity.class);
-                        intent.putExtra("id", getNotes().get(rvDdata.getChildAdapterPosition(view)).getId());
-                        startActivity(intent);
-                    }
-                }
-        );
-        rvDdata.setAdapter(notesAdapter);
-        return v;
+        View root = inflater.inflate(R.layout.fragment_notes, container, false);
+        return root;
     }
 
-    private ArrayList<Note> getNotes() {
-        ArrayList<Note> notes = new ArrayList<>();
-        DaoNotes daoNotes = new DaoNotes(getActivity().getApplicationContext());
-        notes = daoNotes.getAllNotes();
-        return notes;
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().getSupportFragmentManager().beginTransaction().detach(selectorFragment).attach(selectorFragment).commit();
     }
 }
