@@ -35,9 +35,6 @@ public class NotesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         selectorFragment = new SelectorNotesFragment();
         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.contenedor_pequenio_notes, selectorFragment).commit();
-        if ( getActivity().findViewById(R.id.contenedor_pequenio_notes) != null && getActivity().getSupportFragmentManager().findFragmentById(R.id.contenedor_pequenio_reminders) == null ){
-            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.contenedor_pequenio_notes, selectorFragment).commit();
-        }
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,

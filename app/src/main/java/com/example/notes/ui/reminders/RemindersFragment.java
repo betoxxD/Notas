@@ -25,9 +25,6 @@ public class RemindersFragment extends Fragment {
         // Start Reminders Fragment initialization
         selectorFragment = new SelectorRemindersFragment();
         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.contenedor_pequenio_reminders, selectorFragment).commit();
-        if ( getActivity().findViewById(R.id.contenedor_pequenio_reminders) != null && getActivity().getSupportFragmentManager().findFragmentById(R.id.contenedor_pequenio_reminders) == null ){
-            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.contenedor_pequenio_reminders, selectorFragment).commit();
-        }
 
     }
 

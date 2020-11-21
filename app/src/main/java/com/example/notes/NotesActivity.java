@@ -1,6 +1,7 @@
 package com.example.notes;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -13,7 +14,9 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -36,6 +40,7 @@ import com.example.notes.ui.pikers.TimePickerFragment;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.ParseException;
@@ -47,6 +52,7 @@ import java.util.UUID;
 
 public class NotesActivity extends AppCompatActivity {
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     Chip chipDate;
     BottomAppBar bottomAppBar;
     private TextInputEditText tieTitle;
@@ -62,6 +68,9 @@ public class NotesActivity extends AppCompatActivity {
     Button btnDelete;
     Button btnDate;
     Button btnTime;
+    ImageView imageView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,13 +128,14 @@ public class NotesActivity extends AppCompatActivity {
         if(id == -1){
             menu.findItem(R.id.menu_bottom_notes_delete).setVisible(false);
         }
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.search:
+            case R.id.notes_navigation_Tphoto:
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -214,17 +224,10 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
 
-        //click event over navigation menu like back arrow or hamburger icon
-        bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //open bottom sheet
-                BottomSheetDialogFragment bottomSheetDialogFragment = BottomSheetNavigationFragment.newInstance();
-                bottomSheetDialogFragment.show(getSupportFragmentManager(), "Bottom Sheet Dialog Fragment");
-            }
-        });
 
     }
+
+
 
     private void showCustomDialog(){
         AlertDialog.Builder alertDialogDateChooser = new AlertDialog.Builder(NotesActivity.this);

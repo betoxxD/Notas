@@ -58,6 +58,12 @@
                     android:layout_height="wrap_content"
                     android:visibility="invisible"
                     app:chipIcon="@drawable/ic_baseline_access_alarm_24"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/activity_notes_linearLayout"/>
             </LinearLayout>
         </ScrollView>
 
