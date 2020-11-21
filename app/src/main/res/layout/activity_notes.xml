@@ -59,11 +59,12 @@
                     android:visibility="invisible"
                     app:chipIcon="@drawable/ic_baseline_access_alarm_24"/>
 
-                <LinearLayout
+                <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:padding="5dp"
-                    android:id="@+id/activity_notes_linearLayout"/>
+                    android:id="@+id/activity_notes_linearLayout"></TableLayout>
             </LinearLayout>
         </ScrollView>
 

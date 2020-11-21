@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,8 +27,9 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     ImageView imageView;
-    LinearLayout linearLayout;
-    RelativeLayout.LayoutParams layoutParams;
+    TableLayout tableLayout;
+    private int idImageView;
+    TableRow tableRow;
 
     public static BottomSheetNavigationFragment newInstance() {
         Bundle args = new Bundle();
@@ -60,8 +63,9 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
         super.setupDialog(dialog, style);
         //Get the content View
         View contentView = View.inflate(getContext(), R.layout.bottom_navigation_drawer, null);
-        linearLayout = getActivity().findViewById(R.id.activity_notes_linearLayout);
-
+        tableLayout = getActivity().findViewById(R.id.activity_notes_linearLayout);
+        tableRow = new TableRow(getContext());
+        tableLayout.addView(tableRow);
 
         dialog.setContentView(contentView);
 
@@ -107,8 +111,13 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
+            imageView.setId(idImageView++);
             imageView.setPadding(5,5,5,5);
-            linearLayout.addView(imageView);
+            tableRow.addView(imageView);
+            if((idImageView % 5) == 0){
+                tableRow = new TableRow(getContext());
+                tableLayout.addView(tableRow);
+            }
         }
     }
 }
