@@ -23,27 +23,27 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/dialog_button_get_finishdate"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:onClick="showDatePickerDialog"
         android:layout_margin="4dp"
+        android:onClick="showDatePickerDialog"
         android:text="@string/dialog_custom_button_date"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtHeader"/>
+        app:layout_constraintTop_toBottomOf="@id/txtHeader" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/dialog_button_get_finishtime"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:onClick="showTimePickerDialog"
         android:layout_margin="4dp"
+        android:onClick="showTimePickerDialog"
         android:text="@string/dialog_custom_button_time"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dialog_button_get_finishdate"/>
+        app:layout_constraintTop_toBottomOf="@id/dialog_button_get_finishdate" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAcceptDialog"
@@ -69,12 +69,12 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDeleteDialog"
         style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/delete"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/btnCancelDialog"
         app:layout_constraintRight_toRightOf="@+id/btnAcceptDialog"
         app:layout_constraintTop_toBottomOf="@id/dialog_button_get_finishtime" />

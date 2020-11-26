@@ -25,7 +25,7 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.View
     private LayoutInflater inflater;
     private View.OnClickListener onClickListener;
 
-    public void setOnClickListener (View.OnClickListener onClickListener){
+    public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
@@ -54,7 +54,7 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.View
         return new ViewHolder(v);
     }
 
-    public RemindersAdapter(Context context, ArrayList<Reminders> listReminders){
+    public RemindersAdapter(Context context, ArrayList<Reminders> listReminders) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.listReminders = listReminders;
         this.context = context;
@@ -67,8 +67,7 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.View
         public TextView content;
         public TextView date;
 
-        public ViewHolder(View itemView)
-        {
+        public ViewHolder(View itemView) {
             super(itemView);
             cardView = (CardView) itemView.findViewById(R.id.reminder_selector_cardview);
             constraintLayout = (ConstraintLayout) itemView.findViewById(R.id.reminder_selector_constraintlayout);

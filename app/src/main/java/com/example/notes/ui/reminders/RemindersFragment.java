@@ -35,9 +35,6 @@ public class RemindersFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_reminders, container, false);
 
 
-
-
-
         return root;
     }
 

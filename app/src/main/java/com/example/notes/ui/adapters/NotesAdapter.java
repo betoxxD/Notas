@@ -24,7 +24,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     private LayoutInflater inflater;
     private View.OnClickListener onClickListener;
 
-    public void setOnClickListener (View.OnClickListener onClickListener){
+    public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
@@ -52,7 +52,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    public NotesAdapter(Context context, ArrayList<Note> listNotes){
+    public NotesAdapter(Context context, ArrayList<Note> listNotes) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.listNotes = listNotes;
         this.context = context;
@@ -64,8 +64,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         public TextView title;
         public TextView content;
 
-        public ViewHolder(View itemView)
-        {
+        public ViewHolder(View itemView) {
             super(itemView);
             cardView = (CardView) itemView.findViewById(R.id.note_selector_cardview);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.note_selector_linearlayout);

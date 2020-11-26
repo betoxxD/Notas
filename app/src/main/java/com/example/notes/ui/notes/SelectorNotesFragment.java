@@ -78,11 +78,11 @@ public class SelectorNotesFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_selector_notes, container, false);
         rvDdata = (RecyclerView) v.findViewById(R.id.fragment_note_selector_RecyclerView);
-        layoutManager = new GridLayoutManager(getActivity(),2);
+        layoutManager = new GridLayoutManager(getActivity(), 2);
         rvDdata.setLayoutManager(layoutManager);
         ArrayList<Note> notes = new ArrayList<>();
         notes = getNotes();
-        notesAdapter = new NotesAdapter(getActivity(),notes);
+        notesAdapter = new NotesAdapter(getActivity(), notes);
         notesAdapter.setOnClickListener(
                 new View.OnClickListener() {
                     @Override

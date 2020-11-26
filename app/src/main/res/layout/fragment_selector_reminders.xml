@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.reminders.SelectorRemindersFragment">
-    
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_reminder_selector_RecyclerView"
         android:layout_width="match_parent"
@@ -14,6 +14,6 @@
         android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
         android:layout_marginRight="1dp"
-        android:layout_marginBottom="1dp"/>
+        android:layout_marginBottom="1dp" />
 
 </FrameLayout>

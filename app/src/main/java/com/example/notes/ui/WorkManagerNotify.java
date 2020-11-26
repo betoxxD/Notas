@@ -23,7 +23,7 @@ public class WorkManagerNotify extends Worker {
         super(context, workerParams);
     }
 
-    public static void saveNotification(long duration, Data data, String tag){
+    public static void saveNotification(long duration, Data data, String tag) {
         OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(WorkManagerNotify.class)
                 .setInitialDelay(duration, TimeUnit.MILLISECONDS).addTag(tag).setInputData(data).build();
         WorkManager instance = WorkManager.getInstance();
@@ -35,13 +35,13 @@ public class WorkManagerNotify extends Worker {
     public Result doWork() {
         String title = getInputData().getString("Title");
         String content = getInputData().getString("Content");
-        int id = (int) getInputData().getLong("id",0);
-        notify(title,content,id);
+        int id = (int) getInputData().getLong("id", 0);
+        notify(title, content, id);
         return Result.success();
     }
 
 
-    private void notify(String title, String content,int id){
+    private void notify(String title, String content, int id) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -66,4 +66,5 @@ public class WorkManagerNotify extends Worker {
         notificationManager.notify(id, builder.build());
 
     }
+
 }

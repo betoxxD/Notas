@@ -15,54 +15,54 @@ public class DaoReminders {
     DB db;
     SQLiteDatabase ad;
 
-    public DaoReminders(Context ctx){
+    public DaoReminders(Context ctx) {
         this.context = ctx;
         db = new DB(ctx);
         ad = db.getWritableDatabase();
     }
 
-    public long insertReminder (Reminders reminders){
+    public long insertReminder(Reminders reminders) {
         ContentValues cv = new ContentValues();
-        cv.put(DB.COLUMS_TABLENOTES[1],reminders.getTitle());
-        cv.put(DB.COLUMS_TABLENOTES[2],reminders.getContent());
-        cv.put(DB.COLUMS_TABLENOTES[3],reminders.isReminder());
-        cv.put(DB.COLUMS_TABLENOTES[4],reminders.getFinishDate());
-        return  ad.insert(DB.TABLE_NOTES_NAME,null,cv);
+        cv.put(DB.COLUMS_TABLENOTES[1], reminders.getTitle());
+        cv.put(DB.COLUMS_TABLENOTES[2], reminders.getContent());
+        cv.put(DB.COLUMS_TABLENOTES[3], reminders.isReminder());
+        cv.put(DB.COLUMS_TABLENOTES[4], reminders.getFinishDate());
+        return ad.insert(DB.TABLE_NOTES_NAME, null, cv);
     }
 
-    public ArrayList<Reminders> getAllReminders(){
-        Cursor cursor = ad.rawQuery("select * from "+DB.TABLE_NOTES_NAME + " where isReminder = ?",new String[]{String.valueOf(1)});
+    public ArrayList<Reminders> getAllReminders() {
+        Cursor cursor = ad.rawQuery("select * from " + DB.TABLE_NOTES_NAME + " where isReminder = ?", new String[]{String.valueOf(1)});
         ArrayList<Reminders> reminders = new ArrayList<>();
-        if(cursor.getCount() >= 0){
-            while (cursor.moveToNext()){
+        if (cursor.getCount() >= 0) {
+            while (cursor.moveToNext()) {
                 reminders.add(new Reminders(
-                        cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getInt(3),cursor.getString(4)
+                        cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getString(4)
                 ));
             }
         }
         return reminders;
     }
 
-    public ArrayList<Reminders> getAll(){
+    public ArrayList<Reminders> getAll() {
         ArrayList<Reminders> lst = new ArrayList<>();
-        Cursor cursor = ad.query(DB.TABLE_NOTES_NAME, DB.COLUMS_TABLENOTES,null,null,null,null,null,null);
-        if(cursor.getCount() >= 0){
-            while (cursor.moveToNext()){
+        Cursor cursor = ad.query(DB.TABLE_NOTES_NAME, DB.COLUMS_TABLENOTES, null, null, null, null, null, null);
+        if (cursor.getCount() >= 0) {
+            while (cursor.moveToNext()) {
                 lst.add(new Reminders(
-                        cursor.getInt(0),cursor.getString(1),cursor.getString(2),new ArrayList<String>(),cursor.getString(3)
+                        cursor.getInt(0), cursor.getString(1), cursor.getString(2), new ArrayList<String>(), cursor.getString(3)
                 ));
             }
         }
         return lst;
     }
 
-    public Reminders getOneById(long id){
+    public Reminders getOneById(long id) {
         Cursor cursor = null;
         Reminders reminder = null;
-        cursor = ad.rawQuery("select * from "+DB.TABLE_NOTES_NAME + " where "+DB.COLUMS_TABLENOTES[0]+"=?",
+        cursor = ad.rawQuery("select * from " + DB.TABLE_NOTES_NAME + " where " + DB.COLUMS_TABLENOTES[0] + "=?",
                 new String[]{String.valueOf(id)});
-        if(cursor != null){
-            if(cursor.moveToFirst()){
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
                 reminder = new Reminders(
                         cursor.getInt(0),
                         cursor.getString(1),
@@ -75,20 +75,20 @@ public class DaoReminders {
         return reminder;
     }
 
-    public boolean update(Reminders reminder){
+    public boolean update(Reminders reminder) {
         ContentValues cv = new ContentValues();
-        cv.put(DB.COLUMS_TABLENOTES[1],reminder.getTitle());
-        cv.put(DB.COLUMS_TABLENOTES[2],reminder.getContent());
-        cv.put(DB.COLUMS_TABLENOTES[3],reminder.isReminder());
+        cv.put(DB.COLUMS_TABLENOTES[1], reminder.getTitle());
+        cv.put(DB.COLUMS_TABLENOTES[2], reminder.getContent());
+        cv.put(DB.COLUMS_TABLENOTES[3], reminder.isReminder());
         cv.put(DB.COLUMS_TABLENOTES[4], reminder.getFinishDate());
 
         return ad.update(
-                DB.TABLE_NOTES_NAME,cv,"id=?",
+                DB.TABLE_NOTES_NAME, cv, "id=?",
                 new String[]{String.valueOf(reminder.getId())}
-        )>0;
+        ) > 0;
     }
 
-    public boolean delete(long id){
-        return ad.delete(DB.TABLE_NOTES_NAME,"id=?", new String[]{String.valueOf(id)})>0;
+    public boolean delete(long id) {
+        return ad.delete(DB.TABLE_NOTES_NAME, "id=?", new String[]{String.valueOf(id)}) > 0;
     }
 }

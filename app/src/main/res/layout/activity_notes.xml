@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator_layout_notes"
@@ -21,13 +20,16 @@
             android:elevation="4dp"
             android:theme="@style/ToolbarColoredBackArrow"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -57,14 +59,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="invisible"
-                    app:chipIcon="@drawable/ic_baseline_access_alarm_24"/>
+                    app:chipIcon="@drawable/ic_baseline_access_alarm_24" />
 
                 <TableLayout
+                    android:id="@+id/activity_notes_linearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="5dp"
-                    android:id="@+id/activity_notes_linearLayout"></TableLayout>
+                    android:padding="5dp"></TableLayout>
             </LinearLayout>
         </ScrollView>
 
@@ -72,12 +74,12 @@
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBarNotes"
+        style="@style/Widget.MaterialComponents.BottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        style="@style/Widget.MaterialComponents.BottomAppBar"
-        app:navigationIcon="@drawable/ic_baseline_menu_24"
+        app:hideOnScroll="true"
         app:menu="@menu/menu_bottom_notes"
-        app:hideOnScroll="true" />
+        app:navigationIcon="@drawable/ic_baseline_menu_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

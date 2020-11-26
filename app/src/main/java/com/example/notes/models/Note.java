@@ -7,9 +7,9 @@ public class Note {
     String title;
     String content;
     int isReminder;
-    ArrayList<String []> images;
-    ArrayList<String []> video;
-    ArrayList<String []> audio;
+    ArrayList<String[]> images;
+    ArrayList<String[]> video;
+    ArrayList<String[]> audio;
 
     public Note() {
 

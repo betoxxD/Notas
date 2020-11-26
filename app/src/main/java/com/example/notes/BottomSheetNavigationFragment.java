@@ -19,21 +19,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.example.notes.ui.ImageViewActivity;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    ImageView imageView;
-    TableLayout tableLayout;
-    private int idImageView;
-    TableRow tableRow;
+    private static NotesActivity notesActivity;
 
-    public static BottomSheetNavigationFragment newInstance() {
+    public static BottomSheetNavigationFragment newInstance(NotesActivity notesActivity1) {
         Bundle args = new Bundle();
-
+        notesActivity = notesActivity1;
         BottomSheetNavigationFragment fragment = new BottomSheetNavigationFragment();
         fragment.setArguments(args);
         return fragment;
@@ -63,9 +60,6 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
         super.setupDialog(dialog, style);
         //Get the content View
         View contentView = View.inflate(getContext(), R.layout.bottom_navigation_drawer, null);
-        tableLayout = getActivity().findViewById(R.id.activity_notes_linearLayout);
-        tableRow = new TableRow(getContext());
-        tableLayout.addView(tableRow);
 
         dialog.setContentView(contentView);
 
@@ -76,7 +70,7 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.notes_navigation_Tphoto:
-                        dispatchTakePictureIntent();
+                        notesActivity.dispatchTakePictureIntent();
                         break;
                 }
                 return false;
@@ -96,28 +90,6 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
     /**
      *
      */
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK){
-            imageView = new ImageView(getContext());
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);
-            imageView.setId(idImageView++);
-            imageView.setPadding(5,5,5,5);
-            tableRow.addView(imageView);
-            if((idImageView % 5) == 0){
-                tableRow = new TableRow(getContext());
-                tableLayout.addView(tableRow);
-            }
-        }
-    }
+
 }

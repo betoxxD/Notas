@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 
-public class SearchResultsActivity  extends Activity {
+public class SearchResultsActivity extends Activity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
@@ -23,8 +23,8 @@ public class SearchResultsActivity  extends Activity {
         handleIntent(getIntent());
     }
 
-    private void  handleIntent(Intent intent){
-        if(Intent.ACTION_SEARCH.equals((intent.getAction()))){
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals((intent.getAction()))) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             // acciones de busqueda
             Toast.makeText(this, query, Toast.LENGTH_SHORT).show();

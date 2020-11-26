@@ -73,13 +73,13 @@ public class SelectorRemindersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_selector_reminders,container,false);
+        View v = inflater.inflate(R.layout.fragment_selector_reminders, container, false);
         rvDdata = (RecyclerView) v.findViewById(R.id.fragment_reminder_selector_RecyclerView);
-        layoutManager = new GridLayoutManager(getActivity(),2);
+        layoutManager = new GridLayoutManager(getActivity(), 2);
         rvDdata.setLayoutManager(layoutManager);
         ArrayList<Reminders> reminders = new ArrayList<>();
         reminders = getReminders();
-        remindersAdapter = new RemindersAdapter(getActivity(),reminders);
+        remindersAdapter = new RemindersAdapter(getActivity(), reminders);
         remindersAdapter.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -94,7 +94,7 @@ public class SelectorRemindersFragment extends Fragment {
         return v;
     }
 
-    private ArrayList<Reminders> getReminders (){
+    private ArrayList<Reminders> getReminders() {
         ArrayList<Reminders> reminders = new ArrayList<>();
         DaoReminders daoReminders = new DaoReminders(getActivity().getApplicationContext());
         reminders = daoReminders.getAllReminders();

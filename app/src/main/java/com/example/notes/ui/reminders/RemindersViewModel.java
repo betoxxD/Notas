@@ -14,7 +14,7 @@ public class RemindersViewModel extends ViewModel {
 
     public RemindersViewModel() {
         ArrayList<String> fechas = new ArrayList<>();
-        ArrayList <Reminders> reminders = new ArrayList<>();
+        ArrayList<Reminders> reminders = new ArrayList<>();
         mAlReminders = new MutableLiveData<>();
         mAlReminders.setValue(reminders);
     }

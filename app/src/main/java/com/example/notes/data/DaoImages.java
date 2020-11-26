@@ -5,51 +5,42 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-
+import com.example.notes.models.Image;
 import com.example.notes.models.Note;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class DaoNotes {
+public class DaoImages {
     Context context;
     DB db;
     SQLiteDatabase ad;
 
-    public DaoNotes(Context ctx) {
+    public DaoImages(Context ctx) {
         this.context = ctx;
         db = new DB(ctx);
         ad = db.getWritableDatabase();
     }
 
-    public long insertNote(Note note) {
-        ContentValues cv = new ContentValues();
-        cv.put(DB.COLUMS_TABLENOTES[1], note.getTitle());
-        cv.put(DB.COLUMS_TABLENOTES[2], note.getContent());
-        cv.put(DB.COLUMS_TABLENOTES[3], note.isReminder());
-        return ad.insert(DB.TABLE_NOTES_NAME, null, cv);
-    }
-
-    public ArrayList<Note> getAllNotes() {
-        Cursor cursor = ad.rawQuery("select * from " + DB.TABLE_NOTES_NAME + " where isReminder = ?", new String[]{String.valueOf(0)});
-        ArrayList<Note> notes = new ArrayList<>();
-        if (cursor.getCount() >= 0) {
-            while (cursor.moveToNext()) {
-                notes.add(new Note(
-                        cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3)
-                ));
-            }
+    public void insertImage(long id, ArrayList<Image> images) {
+        ContentValues cv;
+        for (int i = 0; i < images.size(); i++) {
+            cv = new ContentValues();
+            cv.put(DB.COLUMNS_TABLEIMAGES[1], id);
+            cv.put(DB.COLUMNS_TABLEIMAGES[2], images.get(i).getSrcImage());
+            ad.insert(DB.TABLE_IMAGES_NAME, null, cv);
         }
-        return notes;
     }
 
-    public ArrayList<Note> getAll() {
-        ArrayList<Note> lst = new ArrayList<>();
-        Cursor cursor = ad.query(DB.TABLE_NOTES_NAME, DB.COLUMS_TABLENOTES, null, null, null, null, null, null);
+    public ArrayList<Image> getAll(long id) {
+        ArrayList<Image> lst = new ArrayList<>();
+        Image image;
+        Cursor cursor = ad.rawQuery("select * from " + DB.TABLE_IMAGES_NAME + " where "+ DB.COLUMNS_TABLEIMAGES[1]  + " = ?", new String[]{String.valueOf(id)});
+
         if (cursor.getCount() >= 0) {
             while (cursor.moveToNext()) {
-                lst.add(new Note(
-                        cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3)
-                ));
+                image = new Image(cursor.getLong(0), cursor.getLong(1), cursor.getString(2));
+                lst.add(image);
             }
         }
         return lst;
