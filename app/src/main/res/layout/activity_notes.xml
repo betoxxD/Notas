@@ -62,11 +62,25 @@
                     app:chipIcon="@drawable/ic_baseline_access_alarm_24" />
 
                 <TableLayout
-                    android:id="@+id/activity_notes_linearLayout"
+                    android:id="@+id/activity_notes_table_images"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="5dp"></TableLayout>
+                    android:padding="5dp" />
+
+                <TableLayout
+                    android:id="@+id/activity_notes_table_videos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp" />
+
+                <TableLayout
+                    android:id="@+id/activity_notes_table_records"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp"/>
             </LinearLayout>
         </ScrollView>
 

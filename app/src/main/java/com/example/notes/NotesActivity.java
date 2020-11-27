@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -62,8 +63,10 @@ public class NotesActivity extends AppCompatActivity {
 
     ArrayList<Image> images;
     ArrayList<Image> newImages;
+    ArrayList<String> videos;
+    ArrayList<String> newVideos;
     static final int REQUEST_TAKE_PHOTO = 1;
-    private int idImageViewOld;
+    private int idImageOld;
     Chip chipDate;
     BottomAppBar bottomAppBar;
     private TextInputEditText tieTitle;
@@ -80,21 +83,36 @@ public class NotesActivity extends AppCompatActivity {
     Button btnDate;
     Button btnTime;
     ImageView imageViewCharged;
-    private TableRow tableRow;
-    private TableLayout tableLayout;
+    ImageView videoViewCharged;
     private DaoImages daoImages;
     private ImageView imageViewNew;
-    private int idImageViewNew;
-    private int rowCounter;
+    private ImageView videoViewNew;
+    private ImageView videoViewOld;
+    private int idImageNew;
+    private int rowCounterImages;
+    private String currentVideoPath;
+    private TableLayout tableLayoutImages;
+    private TableLayout tableLayoutVideos;
+    private TableLayout tableLayoutRecords;
+    private TableRow tableRowImages;
+    private TableRow tableRowVideos;
+    private TableRow tableRowRecords;
+    private int rowCounterVideos;
+    private int idVideoNew;
+    private int idVideoOld;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
-        tableLayout = findViewById(R.id.activity_notes_linearLayout);
-        tableRow = new TableRow(this);
-        tableLayout.addView(tableRow);
+        tableLayoutImages = findViewById(R.id.activity_notes_table_images);
+        tableLayoutVideos = findViewById(R.id.activity_notes_table_videos);
+        tableLayoutRecords = findViewById(R.id.activity_notes_table_records);
+        tableRowImages = new TableRow(this);
+        tableRowVideos = new TableRow(this);
+        tableRowRecords = new TableRow(this);
+        tableLayoutImages.addView(tableRowImages);
         images = new ArrayList<>();
         newImages = new ArrayList<>();
         isReminder = false;
@@ -166,6 +184,18 @@ public class NotesActivity extends AppCompatActivity {
                 makeImageView(currentPhotoPath,false);
             }else {
                 makeImageView(currentPhotoPath, true);
+            }
+        }
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
+            Uri videoUri = data.getData();
+            File file = new File(videoUri.getPath());
+            currentVideoPath = file.getAbsolutePath();
+            Toast.makeText(this, currentVideoPath, Toast.LENGTH_SHORT).show();
+            //videoView.setVideoURI(videoUri);
+            if (id == -1) {
+                makeVideoView(currentVideoPath,false);
+            }else {
+                makeVideoView(currentVideoPath, true);
             }
         }
     }
@@ -248,10 +278,10 @@ public class NotesActivity extends AppCompatActivity {
             float proporcion = 200 / (float) imageBitmap.getWidth();
             imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 200, (int) (imageBitmap.getHeight() * proporcion), false);
             imageViewNew.setImageBitmap(imageBitmap);
-            imageViewNew.setId(idImageViewNew++);
-            rowCounter++;
+            imageViewNew.setId(idImageNew++);
+            rowCounterImages++;
             imageViewNew.setPadding(5, 5, 5, 5);
-            tableRow.addView(imageViewNew);
+            tableRowImages.addView(imageViewNew);
             imageViewNew.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -266,10 +296,10 @@ public class NotesActivity extends AppCompatActivity {
             float proporcion = 200 / (float) imageBitmap.getWidth();
             imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 200, (int) (imageBitmap.getHeight() * proporcion), false);
             imageViewCharged.setImageBitmap(imageBitmap);
-            imageViewCharged.setId(idImageViewOld++);
-            rowCounter++;
+            imageViewCharged.setId(idImageOld++);
+            rowCounterImages++;
             imageViewCharged.setPadding(5, 5, 5, 5);
-            tableRow.addView(imageViewCharged);
+            tableRowImages.addView(imageViewCharged);
             imageViewCharged.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -279,9 +309,75 @@ public class NotesActivity extends AppCompatActivity {
                 }
             });
         }
-        if ((rowCounter % 5) == 0) {
-            tableRow = new TableRow(this);
-            tableLayout.addView(tableRow);
+        if ((rowCounterImages % 5) == 0) {
+            tableRowImages = new TableRow(this);
+            tableLayoutImages.addView(tableRowImages);
+        }
+    }
+
+    private void makeVideoView(String srcVideo, boolean isNew) {
+        int dimensionInDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW / dimensionInDp, photoH / dimensionInDp);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        if (isNew){
+            MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
+            mRetriever.setDataSource(srcVideo);
+            videoViewNew = new ImageView(this);
+            Bitmap imageBitmap = mRetriever.getFrameAtTime(10000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+            //imageBitmap = BitmapFactory.decodeFile(imageBitmap, bmOptions);
+            float proporcion = 200 / (float) imageBitmap.getWidth();
+            imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 200, (int) (imageBitmap.getHeight() * proporcion), false);
+            videoViewNew.setImageBitmap(imageBitmap);
+            videoViewNew.setId(idVideoNew++);
+            rowCounterVideos++;
+            videoViewNew.setPadding(5, 5, 5, 5);
+            tableRowVideos.addView(videoViewNew);
+            videoViewNew.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(NotesActivity.this, ImageViewActivity.class);
+                    intent.putExtra("imagePath", newVideos.get(view.getId()));
+                    startActivity(intent);
+                }
+            });
+        }else {
+            MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
+            mRetriever.setDataSource(srcVideo);
+            Bitmap imageBitmap = mRetriever.getFrameAtTime(10000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+            videoViewCharged = new ImageView(this);
+            //Bitmap imageBitmap = BitmapFactory.decodeFile(srcImage, bmOptions);
+            float proporcion = 200 / (float) imageBitmap.getWidth();
+            imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 200, (int) (imageBitmap.getHeight() * proporcion), false);
+            videoViewCharged.setImageBitmap(imageBitmap);
+            videoViewCharged.setId(idVideoOld++);
+            rowCounterVideos++;
+            videoViewCharged.setPadding(5, 5, 5, 5);
+            tableRowVideos.addView(videoViewCharged);
+            videoViewCharged.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(NotesActivity.this, ImageViewActivity.class);
+                    intent.putExtra("imagePath", videos.get(view.getId()));
+                    startActivity(intent);
+                }
+            });
+        }
+        if ((rowCounterVideos % 5) == 0) {
+            tableRowVideos = new TableRow(this);
+            tableLayoutVideos.addView(tableRowVideos);
         }
     }
 
@@ -560,6 +656,27 @@ public class NotesActivity extends AppCompatActivity {
         return image;
     }
 
+    private File createVideoFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "MP4_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
+        File video = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".mp4",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = video.getAbsolutePath();
+        if (id == -1) {
+            images.add(new Image(currentPhotoPath));
+        } else {
+            newImages.add(new Image(id, currentPhotoPath));
+        }
+        return video;
+    }
+
 
     private void deleteImages() {
         for (int i = 0; i < images.size(); i++) {
@@ -579,4 +696,18 @@ public class NotesActivity extends AppCompatActivity {
             makeImageView(images.get(i).getSrcImage(),false);
         }
     }
+
+    static final int REQUEST_VIDEO_CAPTURE = 2;
+
+    /**
+     * Solicitud para grabar
+     */
+    public void dispatchTakeVideoIntent() {
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+        }
+    }
+
+
 }

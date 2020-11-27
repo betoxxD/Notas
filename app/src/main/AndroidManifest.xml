@@ -17,6 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.VideoViewActivity"></activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.notes.fileprovider"
@@ -24,10 +26,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".ui.ImageViewActivity"/>
+        <activity android:name=".ui.ImageViewActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
