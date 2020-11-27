@@ -43,6 +43,7 @@ import com.example.notes.models.Image;
 import com.example.notes.models.Note;
 import com.example.notes.models.Reminders;
 import com.example.notes.ui.ImageViewActivity;
+import com.example.notes.ui.VideoViewActivity;
 import com.example.notes.ui.WorkManagerNotify;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -113,8 +114,11 @@ public class NotesActivity extends AppCompatActivity {
         tableRowVideos = new TableRow(this);
         tableRowRecords = new TableRow(this);
         tableLayoutImages.addView(tableRowImages);
+        tableLayoutVideos.addView(tableRowVideos);
         images = new ArrayList<>();
         newImages = new ArrayList<>();
+        videos = new ArrayList<>();
+        newVideos = new ArrayList<>();
         isReminder = false;
         daoNotes = new DaoNotes(getApplicationContext());
         daoReminders = new DaoReminders(getApplicationContext());
@@ -188,9 +192,9 @@ public class NotesActivity extends AppCompatActivity {
         }
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             Uri videoUri = data.getData();
+            //File file = new File(videoUri.getPath());
             File file = new File(videoUri.getPath());
             currentVideoPath = file.getAbsolutePath();
-            Toast.makeText(this, currentVideoPath, Toast.LENGTH_SHORT).show();
             //videoView.setVideoURI(videoUri);
             if (id == -1) {
                 makeVideoView(currentVideoPath,false);
@@ -316,31 +320,10 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     private void makeVideoView(String srcVideo, boolean isNew) {
-        int dimensionInDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW / dimensionInDp, photoH / dimensionInDp);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
         if (isNew){
-            MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
-            mRetriever.setDataSource(srcVideo);
+            newVideos.add(srcVideo);
             videoViewNew = new ImageView(this);
-            Bitmap imageBitmap = mRetriever.getFrameAtTime(10000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-            //imageBitmap = BitmapFactory.decodeFile(imageBitmap, bmOptions);
-            float proporcion = 200 / (float) imageBitmap.getWidth();
-            imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 200, (int) (imageBitmap.getHeight() * proporcion), false);
-            videoViewNew.setImageBitmap(imageBitmap);
+            videoViewNew.setBackgroundResource(R.drawable.ic_baseline_play_circle_filled_24);
             videoViewNew.setId(idVideoNew++);
             rowCounterVideos++;
             videoViewNew.setPadding(5, 5, 5, 5);
@@ -348,20 +331,15 @@ public class NotesActivity extends AppCompatActivity {
             videoViewNew.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(NotesActivity.this, ImageViewActivity.class);
-                    intent.putExtra("imagePath", newVideos.get(view.getId()));
+                    Intent intent = new Intent(NotesActivity.this, VideoViewActivity.class);
+                    intent.putExtra("videoPath", newVideos.get(view.getId()));
                     startActivity(intent);
                 }
             });
         }else {
-            MediaMetadataRetriever mRetriever = new MediaMetadataRetriever();
-            mRetriever.setDataSource(srcVideo);
-            Bitmap imageBitmap = mRetriever.getFrameAtTime(10000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+            videos.add(srcVideo);
             videoViewCharged = new ImageView(this);
-            //Bitmap imageBitmap = BitmapFactory.decodeFile(srcImage, bmOptions);
-            float proporcion = 200 / (float) imageBitmap.getWidth();
-            imageBitmap = Bitmap.createScaledBitmap(imageBitmap, 200, (int) (imageBitmap.getHeight() * proporcion), false);
-            videoViewCharged.setImageBitmap(imageBitmap);
+            videoViewCharged.setBackgroundResource(R.drawable.ic_baseline_play_circle_filled_24);
             videoViewCharged.setId(idVideoOld++);
             rowCounterVideos++;
             videoViewCharged.setPadding(5, 5, 5, 5);
@@ -369,8 +347,8 @@ public class NotesActivity extends AppCompatActivity {
             videoViewCharged.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(NotesActivity.this, ImageViewActivity.class);
-                    intent.putExtra("imagePath", videos.get(view.getId()));
+                    Intent intent = new Intent(NotesActivity.this, VideoViewActivity.class);
+                    intent.putExtra("videoPath", videos.get(view.getId()));
                     startActivity(intent);
                 }
             });
