@@ -1,22 +1,28 @@
 package com.example.notes;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.work.Data;
 import androidx.work.WorkManager;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -39,6 +45,7 @@ import android.widget.Toast;
 import com.example.notes.data.DaoImages;
 import com.example.notes.data.DaoNotes;
 import com.example.notes.data.DaoReminders;
+import com.example.notes.data.DaoVideos;
 import com.example.notes.models.Image;
 import com.example.notes.models.Note;
 import com.example.notes.models.Reminders;
@@ -48,6 +55,7 @@ import com.example.notes.ui.WorkManagerNotify;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
@@ -62,10 +70,12 @@ import java.util.UUID;
 
 public class NotesActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_READEXTERNAL = 1001;
     ArrayList<Image> images;
     ArrayList<Image> newImages;
     ArrayList<String> videos;
     ArrayList<String> newVideos;
+    boolean hasPermissions;
     static final int REQUEST_TAKE_PHOTO = 1;
     private int idImageOld;
     Chip chipDate;
@@ -86,6 +96,7 @@ public class NotesActivity extends AppCompatActivity {
     ImageView imageViewCharged;
     ImageView videoViewCharged;
     private DaoImages daoImages;
+    private DaoVideos daoVideos;
     private ImageView imageViewNew;
     private ImageView videoViewNew;
     private ImageView videoViewOld;
@@ -115,6 +126,7 @@ public class NotesActivity extends AppCompatActivity {
         tableRowRecords = new TableRow(this);
         tableLayoutImages.addView(tableRowImages);
         tableLayoutVideos.addView(tableRowVideos);
+        hasPermissions = false;
         images = new ArrayList<>();
         newImages = new ArrayList<>();
         videos = new ArrayList<>();
@@ -123,12 +135,16 @@ public class NotesActivity extends AppCompatActivity {
         daoNotes = new DaoNotes(getApplicationContext());
         daoReminders = new DaoReminders(getApplicationContext());
         daoImages = new DaoImages(getApplicationContext());
+        daoVideos = new DaoVideos(getApplicationContext());
         note = new Note();
         reminder = new Reminders();
         tieTitle = findViewById(R.id.activity_notes_textinputedittext);
         etContent = findViewById(R.id.activity_notes_content);
         chipDate = findViewById(R.id.activity_notes_date_chip);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            validatePermission();
+        }
         id = getIntent().getIntExtra("id", -1);
         if (id != -1) {
             getReminder();
@@ -185,20 +201,19 @@ public class NotesActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             if (id == -1) {
-                makeImageView(currentPhotoPath,false);
-            }else {
+                makeImageView(currentPhotoPath, false);
+            } else {
                 makeImageView(currentPhotoPath, true);
             }
         }
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             Uri videoUri = data.getData();
-            //File file = new File(videoUri.getPath());
-            File file = new File(videoUri.getPath());
-            currentVideoPath = file.getAbsolutePath();
-            //videoView.setVideoURI(videoUri);
+            currentVideoPath = videoUri.toString();
             if (id == -1) {
-                makeVideoView(currentVideoPath,false);
-            }else {
+                videos.add(currentVideoPath);
+                makeVideoView(currentVideoPath, false);
+            } else {
+                newVideos.add(currentVideoPath);
                 makeVideoView(currentVideoPath, true);
             }
         }
@@ -276,7 +291,7 @@ public class NotesActivity extends AppCompatActivity {
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
 
-        if (isNew){
+        if (isNew) {
             imageViewNew = new ImageView(this);
             Bitmap imageBitmap = BitmapFactory.decodeFile(srcImage, bmOptions);
             float proporcion = 200 / (float) imageBitmap.getWidth();
@@ -294,7 +309,7 @@ public class NotesActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-        }else {
+        } else {
             imageViewCharged = new ImageView(this);
             Bitmap imageBitmap = BitmapFactory.decodeFile(srcImage, bmOptions);
             float proporcion = 200 / (float) imageBitmap.getWidth();
@@ -320,8 +335,7 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     private void makeVideoView(String srcVideo, boolean isNew) {
-        if (isNew){
-            newVideos.add(srcVideo);
+        if (isNew) {
             videoViewNew = new ImageView(this);
             videoViewNew.setBackgroundResource(R.drawable.ic_baseline_play_circle_filled_24);
             videoViewNew.setId(idVideoNew++);
@@ -336,8 +350,7 @@ public class NotesActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-        }else {
-            videos.add(srcVideo);
+        } else {
             videoViewCharged = new ImageView(this);
             videoViewCharged.setBackgroundResource(R.drawable.ic_baseline_play_circle_filled_24);
             videoViewCharged.setId(idVideoOld++);
@@ -399,7 +412,7 @@ public class NotesActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //open bottom sheet
-                BottomSheetDialogFragment bottomSheetDialogFragment = BottomSheetNavigationFragment.newInstance(NotesActivity.this);
+                BottomSheetDialogFragment bottomSheetDialogFragment = BottomSheetNavigationFragment.newInstance(NotesActivity.this, hasPermissions);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), "Bottom Sheet Dialog Fragment");
             }
         });
@@ -482,6 +495,7 @@ public class NotesActivity extends AppCompatActivity {
                     if (idInserted != -1) {
                         Toast.makeText(NotesActivity.this, "Recordatorio agregado correctamente", Toast.LENGTH_SHORT).show();
                         saveImages(idInserted);
+                        saveVideos(idInserted);
                         saveNotify();
                         setResult(Activity.RESULT_OK, intent);
                         finish();
@@ -494,6 +508,7 @@ public class NotesActivity extends AppCompatActivity {
                     idInserted = daoNotes.insertNote(note);
                     if (idInserted != -1) {
                         saveImages(idInserted);
+                        saveVideos(idInserted);
                         Toast.makeText(NotesActivity.this, "Nota agregada correctamente", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK, intent);
                         finish();
@@ -507,8 +522,9 @@ public class NotesActivity extends AppCompatActivity {
                     this.reminder.setContent(etContent.getText().toString());
                     this.reminder.setFinishDate(chipDate.getText().toString());
                     this.reminder.setReminder(1);
-                    daoImages.insertImage(id,newImages);
                     if (daoReminders.update(this.reminder)) {
+                        daoImages.insertImage(id, newImages);
+                        daoVideos.insertVideo(id, newVideos);
                         Toast.makeText(NotesActivity.this, "Modificado correctamente", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(NotesActivity.this, "Ocurrió un error", Toast.LENGTH_SHORT).show();
@@ -517,8 +533,9 @@ public class NotesActivity extends AppCompatActivity {
                     this.note.setTitle(tieTitle.getText().toString());
                     this.note.setContent(etContent.getText().toString());
                     this.note.setReminder(0);
-                    daoImages.insertImage(id,newImages);
                     if (daoNotes.update(this.note)) {
+                        daoImages.insertImage(id, newImages);
+                        daoVideos.insertVideo(id, newVideos);
                         Toast.makeText(NotesActivity.this, "Modificado correctamente", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(NotesActivity.this, "Ocurrió un error", Toast.LENGTH_SHORT).show();
@@ -533,7 +550,7 @@ public class NotesActivity extends AppCompatActivity {
      */
     private void getReminder() {
         reminder = daoReminders.getOneById(id);
-        if(reminder.isReminder() == 0){
+        if (reminder.isReminder() == 0) {
             note = new Note();
             note.setId(reminder.getId());
             note.setTitle(reminder.getTitle());
@@ -541,7 +558,9 @@ public class NotesActivity extends AppCompatActivity {
             note.setReminder(reminder.isReminder());
         }
         images = daoImages.getAll(id);
+        videos = daoVideos.getAll(id);
         showImages();
+        showVideos();
         tieTitle.setText(reminder.getTitle());
         etContent.setText(reminder.getContent());
         if (reminder.isReminder() == 1) {
@@ -634,28 +653,6 @@ public class NotesActivity extends AppCompatActivity {
         return image;
     }
 
-    private File createVideoFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "MP4_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_MOVIES);
-        File video = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".mp4",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = video.getAbsolutePath();
-        if (id == -1) {
-            images.add(new Image(currentPhotoPath));
-        } else {
-            newImages.add(new Image(id, currentPhotoPath));
-        }
-        return video;
-    }
-
-
     private void deleteImages() {
         for (int i = 0; i < images.size(); i++) {
             File fDelete = new File(images.get(i).getSrcImage());
@@ -669,9 +666,19 @@ public class NotesActivity extends AppCompatActivity {
         daoImages.insertImage(id, images);
     }
 
+    private void saveVideos(long id) {
+        daoVideos.insertVideo(id, videos);
+    }
+
     private void showImages() {
         for (int i = 0; i < images.size(); i++) {
-            makeImageView(images.get(i).getSrcImage(),false);
+            makeImageView(images.get(i).getSrcImage(), false);
+        }
+    }
+
+    private void showVideos() {
+        for (int i = 0; i < videos.size(); i++) {
+            makeVideoView(videos.get(i), false);
         }
     }
 
@@ -687,5 +694,53 @@ public class NotesActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void validatePermission() {
 
+        if (ContextCompat.checkSelfPermission(
+                NotesActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED) {
+            // You can use the API that requires the permission.
+            hasPermissions = true;
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            // In an educational UI, explain to the user why your app requires this
+            // permission for a specific feature to behave as expected. In this UI,
+            // include a "cancel" or "no thanks" button that allows the user to
+            // continue using your app without granting the permission.
+
+            new AlertDialog.Builder(NotesActivity.this)
+                    .setMessage("Es necesario que concedas permisos para leer archivos. De esta manera, podremos mostrarte el video grabado")
+                    .setPositiveButton(R.string.accept, null)
+                    .show();
+
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_CODE_READEXTERNAL);
+
+        } else {
+            // You can directly ask for the permission.
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_CODE_READEXTERNAL);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+
+        if (requestCode == REQUEST_CODE_READEXTERNAL) {
+
+            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    hasPermissions = true;
+                } else {
+                    Toast.makeText(NotesActivity.this, "Opción de videos deshabilitada por falta de permisos.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
+
+
+    }
 }

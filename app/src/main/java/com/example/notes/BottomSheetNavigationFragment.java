@@ -27,10 +27,15 @@ import com.google.android.material.navigation.NavigationView;
 public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
 
     private static NotesActivity notesActivity;
+    private static boolean hasPermission;
 
-    public static BottomSheetNavigationFragment newInstance(NotesActivity notesActivity1) {
+    public static BottomSheetNavigationFragment newInstance(NotesActivity notesActivity1, boolean permission) {
         Bundle args = new Bundle();
         notesActivity = notesActivity1;
+        hasPermission = permission;
+        if(!permission) {
+
+        }
         BottomSheetNavigationFragment fragment = new BottomSheetNavigationFragment();
         fragment.setArguments(args);
         return fragment;

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -27,13 +28,10 @@ public class VideoViewActivity extends AppCompatActivity {
         if (extras == null) {
             return;
         }
-        String res = extras.getString("videoPath");
-        File videoFile = new File(res);
+        Uri video = Uri.parse(extras.getString("videoPath"));
         VideoView videoView = findViewById(R.id.videoViewActivity);
-        videoView.setVideoPath(res);
+        videoView.setVideoURI(video);
+        //videoView.setVideoPath(video.getPath());
         videoView.start();
-        if (videoFile.exists()) {
-
-        }
     }
 }
