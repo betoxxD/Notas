@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,16 +29,16 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
 
     private static NotesActivity notesActivity;
     private static boolean hasPermission;
+    private static MenuItem menuVideo;
 
     public static BottomSheetNavigationFragment newInstance(NotesActivity notesActivity1, boolean permission) {
         Bundle args = new Bundle();
         notesActivity = notesActivity1;
         hasPermission = permission;
-        if(!permission) {
-
-        }
         BottomSheetNavigationFragment fragment = new BottomSheetNavigationFragment();
         fragment.setArguments(args);
+
+        menuVideo = notesActivity.findViewById(R.id.notes_navigation_Tvideo);
         return fragment;
     }
 
@@ -69,6 +70,11 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
         dialog.setContentView(contentView);
 
         NavigationView navigationView = contentView.findViewById(R.id.navigation_view_notes);
+        if(!hasPermission) {
+            navigationView.getMenu().findItem(R.id.notes_navigation_Tvideo).setVisible(false);
+        }else {
+            navigationView.getMenu().findItem(R.id.notes_navigation_Tvideo).setVisible(true);
+        }
         //implement navigation menu item click event
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

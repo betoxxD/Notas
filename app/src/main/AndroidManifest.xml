@@ -5,6 +5,7 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <uses-permission-sdk-23
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -17,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.VideoViewActivity"></activity>
+        <activity android:name=".ui.VideoViewActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

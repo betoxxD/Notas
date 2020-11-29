@@ -141,10 +141,6 @@ public class NotesActivity extends AppCompatActivity {
         tieTitle = findViewById(R.id.activity_notes_textinputedittext);
         etContent = findViewById(R.id.activity_notes_content);
         chipDate = findViewById(R.id.activity_notes_date_chip);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            validatePermission();
-        }
         id = getIntent().getIntExtra("id", -1);
         if (id != -1) {
             getReminder();
@@ -411,6 +407,9 @@ public class NotesActivity extends AppCompatActivity {
         bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    validatePermission();
+                }
                 //open bottom sheet
                 BottomSheetDialogFragment bottomSheetDialogFragment = BottomSheetNavigationFragment.newInstance(NotesActivity.this, hasPermissions);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), "Bottom Sheet Dialog Fragment");
@@ -698,11 +697,11 @@ public class NotesActivity extends AppCompatActivity {
     private void validatePermission() {
 
         if (ContextCompat.checkSelfPermission(
-                NotesActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_GRANTED) {
             // You can use the API that requires the permission.
             hasPermissions = true;
-        } else if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
             // In an educational UI, explain to the user why your app requires this
             // permission for a specific feature to behave as expected. In this UI,
             // include a "cancel" or "no thanks" button that allows the user to
@@ -731,7 +730,7 @@ public class NotesActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_READEXTERNAL) {
 
-            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (permissions[0].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     hasPermissions = true;
                 } else {
