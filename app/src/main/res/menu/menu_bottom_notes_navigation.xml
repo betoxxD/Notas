@@ -11,12 +11,8 @@
             android:icon="@drawable/ic_baseline_video_call_24"
             android:title="@string/notes_navigation_Tvideo" />
         <item
-            android:id="@+id/notes_navigation_Aphoto"
-            android:icon="@drawable/ic_baseline_add_photo_alternate_24"
-            android:title="@string/notes_navigation_Aphoto" />
-        <item
-            android:id="@+id/notes_navigation_Avideo"
-            android:icon="@drawable/ic_baseline_video_library_24"
-            android:title="@string/notes_navigation_Avideo" />
+            android:id="@+id/notes_navigation_record"
+            android:icon="@drawable/ic_baseline_mic_24"
+            android:title="@string/notes_navigation_record" />
     </group>
 </menu>

@@ -86,6 +86,9 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
                     case R.id.notes_navigation_Tvideo:
                         notesActivity.dispatchTakeVideoIntent();
                         break;
+                    case R.id.notes_navigation_record:
+                        notesActivity.openRecordActivity();
+                        break;
                 }
                 return false;
             }

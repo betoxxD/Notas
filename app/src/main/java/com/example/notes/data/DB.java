@@ -62,6 +62,19 @@ public class DB extends SQLiteOpenHelper {
                     "  FOREIGN KEY(idNote) REFERENCES Notes(id)\n" +
                     ");";
 
+    // Recorders
+    public static final String TABLE_RECORDERS_NAME = "recorders";
+    public static final String[] COLUMNS_TABLERECORDERS = {
+            "id", "idNote", "srcRecord"
+    };
+    public static final String SCRIPT_TABLE_RECORDERS =
+            "CREATE TABLE recorders (\n" +
+                    "  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                    "  idNote INTEGER NOT NULL,\n" +
+                    "  srcRecord TEXT NOT NULL,\n" +
+                    "  FOREIGN KEY(idNote) REFERENCES Notes(id)\n" +
+                    ");";
+
     Context context;
 
     // DB creation
@@ -77,6 +90,7 @@ public class DB extends SQLiteOpenHelper {
         db.execSQL(SCRIPT_TABLE_IMAGES);
         db.execSQL(SCRIPT_TABLE_REMINDERS_DATE);
         db.execSQL(SCRIPT_TABLE_VIDEOS);
+        db.execSQL(SCRIPT_TABLE_RECORDERS);
     }
 
     @Override

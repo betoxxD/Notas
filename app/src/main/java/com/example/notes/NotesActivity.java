@@ -21,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ import android.widget.Toast;
 
 import com.example.notes.data.DaoImages;
 import com.example.notes.data.DaoNotes;
+import com.example.notes.data.DaoRecorders;
 import com.example.notes.data.DaoReminders;
 import com.example.notes.data.DaoVideos;
 import com.example.notes.models.Image;
@@ -65,12 +67,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.UUID;
 
 public class NotesActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_READEXTERNAL = 1001;
+    private static final int RECORD_ACTIVITY_RESULT = 1824;
     ArrayList<Image> images;
     ArrayList<Image> newImages;
     ArrayList<String> videos;
@@ -95,11 +99,13 @@ public class NotesActivity extends AppCompatActivity {
     Button btnTime;
     ImageView imageViewCharged;
     ImageView videoViewCharged;
+    ImageView recordViewCharged;
     private DaoImages daoImages;
+    private DaoRecorders daoRecorders;
     private DaoVideos daoVideos;
     private ImageView imageViewNew;
     private ImageView videoViewNew;
-    private ImageView videoViewOld;
+    private ImageView recordViewNew;
     private int idImageNew;
     private int rowCounterImages;
     private String currentVideoPath;
@@ -112,12 +118,18 @@ public class NotesActivity extends AppCompatActivity {
     private int rowCounterVideos;
     private int idVideoNew;
     private int idVideoOld;
+    private ArrayList<String> records;
+    private ArrayList<String> newRecords;
+    private int rowCounterRecords;
+    private int idRecordNew;
+    private int idrecordOld;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
+        // Inicia
         tableLayoutImages = findViewById(R.id.activity_notes_table_images);
         tableLayoutVideos = findViewById(R.id.activity_notes_table_videos);
         tableLayoutRecords = findViewById(R.id.activity_notes_table_records);
@@ -126,16 +138,20 @@ public class NotesActivity extends AppCompatActivity {
         tableRowRecords = new TableRow(this);
         tableLayoutImages.addView(tableRowImages);
         tableLayoutVideos.addView(tableRowVideos);
+        tableLayoutRecords.addView(tableRowRecords);
         hasPermissions = false;
         images = new ArrayList<>();
         newImages = new ArrayList<>();
         videos = new ArrayList<>();
         newVideos = new ArrayList<>();
+        records = new ArrayList<>();
+        newRecords = new ArrayList<>();
         isReminder = false;
         daoNotes = new DaoNotes(getApplicationContext());
         daoReminders = new DaoReminders(getApplicationContext());
         daoImages = new DaoImages(getApplicationContext());
         daoVideos = new DaoVideos(getApplicationContext());
+        daoRecorders = new DaoRecorders(getApplicationContext());
         note = new Note();
         reminder = new Reminders();
         tieTitle = findViewById(R.id.activity_notes_textinputedittext);
@@ -211,6 +227,17 @@ public class NotesActivity extends AppCompatActivity {
             } else {
                 newVideos.add(currentVideoPath);
                 makeVideoView(currentVideoPath, true);
+            }
+        }
+        if (requestCode == RECORD_ACTIVITY_RESULT && resultCode == RESULT_OK) {
+            String currentRecordPath;
+            currentRecordPath = data.getStringExtra("RecordFile");
+            if (id == -1) {
+                records.add(currentRecordPath);
+                makeRecordView(currentRecordPath, false);
+            } else {
+                newRecords.add(currentRecordPath);
+                makeRecordView(currentRecordPath, true);
             }
         }
     }
@@ -333,7 +360,7 @@ public class NotesActivity extends AppCompatActivity {
     private void makeVideoView(String srcVideo, boolean isNew) {
         if (isNew) {
             videoViewNew = new ImageView(this);
-            videoViewNew.setBackgroundResource(R.drawable.ic_baseline_play_circle_filled_24);
+            videoViewNew.setBackgroundResource(R.drawable.ic_baseline_play_circle_outline_24);
             videoViewNew.setId(idVideoNew++);
             rowCounterVideos++;
             videoViewNew.setPadding(5, 5, 5, 5);
@@ -348,7 +375,7 @@ public class NotesActivity extends AppCompatActivity {
             });
         } else {
             videoViewCharged = new ImageView(this);
-            videoViewCharged.setBackgroundResource(R.drawable.ic_baseline_play_circle_filled_24);
+            videoViewCharged.setBackgroundResource(R.drawable.ic_baseline_play_circle_outline_24);
             videoViewCharged.setId(idVideoOld++);
             rowCounterVideos++;
             videoViewCharged.setPadding(5, 5, 5, 5);
@@ -365,6 +392,98 @@ public class NotesActivity extends AppCompatActivity {
         if ((rowCounterVideos % 5) == 0) {
             tableRowVideos = new TableRow(this);
             tableLayoutVideos.addView(tableRowVideos);
+        }
+    }
+
+    private void makeRecordView(String srcRecord, boolean isNew) {
+        if (isNew) {
+            recordViewNew = new ImageView(this);
+            recordViewNew.setBackgroundResource(R.drawable.ic_baseline_play_circle_outline_24);
+            recordViewNew.setId(idRecordNew++);
+            rowCounterRecords++;
+            recordViewNew.setPadding(5, 5, 5, 5);
+            tableRowRecords.addView(recordViewNew);
+            recordViewNew.setOnClickListener(new View.OnClickListener() {
+                View thisView;
+                boolean mStartPlaying = true;
+
+                private MediaPlayer   player = null;
+                private void onPlay(boolean start) {
+                    if (start) {
+                        startPlaying();
+                    } else {
+                        stopPlaying();
+                    }
+                }
+
+                private void startPlaying() {
+                    player = new MediaPlayer();
+                    try {
+                        player.setDataSource(newRecords.get(thisView.getId()));
+                        player.prepare();
+                        player.start();
+                    } catch (IOException e) {
+                        Log.e("taBuga", "prepare() ta Buga");
+                    }
+                }
+
+                private void stopPlaying() {
+                    player.release();
+                    player = null;
+                }
+                @Override
+                public void onClick(View view) {
+                    thisView = view;
+                    onPlay(mStartPlaying);
+                    mStartPlaying = !mStartPlaying;
+                }
+            });
+        } else {
+            recordViewCharged = new ImageView(this);
+            recordViewCharged.setBackgroundResource(R.drawable.ic_baseline_play_circle_outline_24);
+            recordViewCharged.setId(idrecordOld++);
+            rowCounterRecords++;
+            recordViewCharged.setPadding(5, 5, 5, 5);
+            tableRowRecords.addView(recordViewCharged);
+            recordViewCharged.setOnClickListener(new View.OnClickListener() {
+                View thisView;
+                boolean mStartPlaying = true;
+
+                private MediaPlayer   player = null;
+                private void onPlay(boolean start) {
+                    if (start) {
+                        startPlaying();
+                    } else {
+                        stopPlaying();
+                    }
+                }
+
+                private void startPlaying() {
+                    player = new MediaPlayer();
+                    try {
+                        player.setDataSource(records.get(thisView.getId()));
+                        player.prepare();
+                        player.start();
+                    } catch (IOException e) {
+                        Log.e("taBuga", "prepare() ta Buga");
+                    }
+                }
+
+                private void stopPlaying() {
+                    player.release();
+                    player = null;
+                }
+                @Override
+                public void onClick(View view) {
+                    thisView = view;
+                    onPlay(mStartPlaying);
+                    mStartPlaying = !mStartPlaying;
+                }
+            });
+        }
+        if ((rowCounterRecords % 5) == 0) {
+            tableRowRecords = new TableRow(this);
+            tableLayoutRecords.addView(tableRowRecords);
         }
     }
 
@@ -495,6 +614,7 @@ public class NotesActivity extends AppCompatActivity {
                         Toast.makeText(NotesActivity.this, "Recordatorio agregado correctamente", Toast.LENGTH_SHORT).show();
                         saveImages(idInserted);
                         saveVideos(idInserted);
+                        saveRecords(idInserted);
                         saveNotify();
                         setResult(Activity.RESULT_OK, intent);
                         finish();
@@ -508,6 +628,7 @@ public class NotesActivity extends AppCompatActivity {
                     if (idInserted != -1) {
                         saveImages(idInserted);
                         saveVideos(idInserted);
+                        saveRecords(idInserted);
                         Toast.makeText(NotesActivity.this, "Nota agregada correctamente", Toast.LENGTH_SHORT).show();
                         setResult(Activity.RESULT_OK, intent);
                         finish();
@@ -524,6 +645,7 @@ public class NotesActivity extends AppCompatActivity {
                     if (daoReminders.update(this.reminder)) {
                         daoImages.insertImage(id, newImages);
                         daoVideos.insertVideo(id, newVideos);
+                        daoRecorders.insertRecorder(id,newRecords);
                         Toast.makeText(NotesActivity.this, "Modificado correctamente", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(NotesActivity.this, "Ocurrió un error", Toast.LENGTH_SHORT).show();
@@ -535,6 +657,7 @@ public class NotesActivity extends AppCompatActivity {
                     if (daoNotes.update(this.note)) {
                         daoImages.insertImage(id, newImages);
                         daoVideos.insertVideo(id, newVideos);
+                        daoRecorders.insertRecorder(id,newRecords);
                         Toast.makeText(NotesActivity.this, "Modificado correctamente", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(NotesActivity.this, "Ocurrió un error", Toast.LENGTH_SHORT).show();
@@ -558,8 +681,10 @@ public class NotesActivity extends AppCompatActivity {
         }
         images = daoImages.getAll(id);
         videos = daoVideos.getAll(id);
+        records = daoRecorders.getAll(id);
         showImages();
         showVideos();
+        showRecords();
         tieTitle.setText(reminder.getTitle());
         etContent.setText(reminder.getContent());
         if (reminder.isReminder() == 1) {
@@ -665,6 +790,10 @@ public class NotesActivity extends AppCompatActivity {
         daoImages.insertImage(id, images);
     }
 
+    private void saveRecords(long id) {
+        daoRecorders.insertRecorder(id,records);
+    }
+
     private void saveVideos(long id) {
         daoVideos.insertVideo(id, videos);
     }
@@ -678,6 +807,12 @@ public class NotesActivity extends AppCompatActivity {
     private void showVideos() {
         for (int i = 0; i < videos.size(); i++) {
             makeVideoView(videos.get(i), false);
+        }
+    }
+
+    private void showRecords() {
+        for (int i = 0; i < records.size(); i++) {
+            makeRecordView(records.get(i), false);
         }
     }
 
@@ -739,7 +874,10 @@ public class NotesActivity extends AppCompatActivity {
             }
 
         }
+    }
 
-
+    public void openRecordActivity() {
+        Intent intent = new Intent(NotesActivity.this, RecordActivity.class);
+        startActivityForResult(intent, RECORD_ACTIVITY_RESULT);
     }
 }
