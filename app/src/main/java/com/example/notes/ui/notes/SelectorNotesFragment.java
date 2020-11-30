@@ -34,7 +34,7 @@ public class SelectorNotesFragment extends Fragment {
     private String mParam2;
     private RecyclerView rvDdata;
     private GridLayoutManager layoutManager;
-    private NotesAdapter notesAdapter;
+    public static NotesAdapter notesAdapter;
 
     public SelectorNotesFragment() {
         // Required empty public constructor

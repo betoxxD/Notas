@@ -32,7 +32,7 @@ public class SelectorRemindersFragment extends Fragment {
     private RemindersViewModel remindersViewModel;
     private RecyclerView rvDdata;
     private GridLayoutManager layoutManager;
-    private RemindersAdapter remindersAdapter;
+    public static RemindersAdapter remindersAdapter;
 
     private String mParam1;
     private String mParam2;

@@ -12,6 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.notes.ui.NotesActivity;
+import com.example.notes.ui.adapters.NotesAdapter;
+import com.example.notes.ui.notes.NotesFragment;
+import com.example.notes.ui.notes.SelectorNotesFragment;
+import com.example.notes.ui.reminders.SelectorRemindersFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -30,12 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     ArrayAdapter<String> arrayAdapter;
-    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listView = findViewById(R.id.list_view_search);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,6 +81,19 @@ public class MainActivity extends AppCompatActivity {
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                SelectorNotesFragment.notesAdapter.getFilter().filter(newText);
+                SelectorRemindersFragment.remindersAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
 

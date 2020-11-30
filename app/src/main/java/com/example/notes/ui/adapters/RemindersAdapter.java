@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,14 +15,17 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notes.R;
+import com.example.notes.models.Note;
 import com.example.notes.models.Reminders;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 
-public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.ViewHolder> {
+public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.ViewHolder> implements Filterable {
 
     private ArrayList<Reminders> listReminders;
+    private ArrayList<Reminders> listRemindersAll;
     private Context context;
     private LayoutInflater inflater;
     private View.OnClickListener onClickListener;
@@ -79,13 +84,48 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.View
     /**
      * Construye la clase obteniendo el contexto de la aplicación, y la lista de recordatorios que va a manejar.
      * @param context Contexto del Activiy que lo invoca.
-     * @param listNotes Lista de notas que serán agregadas.
+     * @param listReminders Lista de notas que serán agregadas.
      */
     public RemindersAdapter(Context context, ArrayList<Reminders> listReminders) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.listReminders = listReminders;
+        this.listRemindersAll = new ArrayList<>(listReminders);
         this.context = context;
     }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    Filter filter = new Filter() {
+        // Run background_thread
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            ArrayList<Reminders> filteredList = new ArrayList<>();
+            if(charSequence.toString().isEmpty()){
+                filteredList.addAll(listRemindersAll);
+            }else {
+                for (Reminders reminders: listRemindersAll){
+                    if(reminders.getTitle().toLowerCase().contains(charSequence.toString().toLowerCase()) || reminders.getContent().toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                        filteredList.add(reminders);
+                    }
+                }
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values =filteredList;
+            return filterResults;
+        }
+
+        // runs on a thread
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            listReminders.clear();
+            listReminders.addAll((Collection<? extends Reminders>) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
     /**
      * Crea un nuevo viewHolder adaptado a las necesidades a mostrar.
