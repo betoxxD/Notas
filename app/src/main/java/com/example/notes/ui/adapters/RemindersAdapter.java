@@ -24,7 +24,7 @@ import java.util.Collection;
 
 public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.ViewHolder> implements Filterable {
 
-    private ArrayList<Reminders> listReminders;
+    private static ArrayList<Reminders> listReminders;
     private ArrayList<Reminders> listRemindersAll;
     private Context context;
     private LayoutInflater inflater;
@@ -126,6 +126,10 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.View
             notifyDataSetChanged();
         }
     };
+
+    public static ArrayList<Reminders> getListReminders(){
+        return listReminders;
+    }
 
     /**
      * Crea un nuevo viewHolder adaptado a las necesidades a mostrar.

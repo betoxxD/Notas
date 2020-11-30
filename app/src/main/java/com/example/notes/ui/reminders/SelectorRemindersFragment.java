@@ -11,10 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.notes.models.Note;
 import com.example.notes.ui.NotesActivity;
 import com.example.notes.R;
 import com.example.notes.data.DaoReminders;
 import com.example.notes.models.Reminders;
+import com.example.notes.ui.adapters.NotesAdapter;
 import com.example.notes.ui.adapters.RemindersAdapter;
 
 import java.util.ArrayList;
@@ -95,7 +97,7 @@ public class SelectorRemindersFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getActivity(), NotesActivity.class);
-                        intent.putExtra("id", getReminders().get(rvDdata.getChildAdapterPosition(view)).getId());
+                        intent.putExtra("id", getRemindersForSearch().get(rvDdata.getChildAdapterPosition(view)).getId());
                         startActivity(intent);
                     }
                 }
@@ -112,6 +114,12 @@ public class SelectorRemindersFragment extends Fragment {
         ArrayList<Reminders> reminders = new ArrayList<>();
         DaoReminders daoReminders = new DaoReminders(getActivity().getApplicationContext());
         reminders = daoReminders.getAllReminders();
+        return reminders;
+    }
+
+    private ArrayList<Reminders> getRemindersForSearch() {
+        ArrayList<Reminders> reminders = new ArrayList<>();
+        reminders = RemindersAdapter.getListReminders();
         return reminders;
     }
 }

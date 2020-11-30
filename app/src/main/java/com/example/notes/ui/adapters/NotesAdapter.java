@@ -23,7 +23,7 @@ import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> implements Filterable {
 
-    private ArrayList<Note> listNotes;
+    private static ArrayList<Note> listNotes;
     ArrayList<Note> listNotesAll;
     private Context context;
     private LayoutInflater inflater;
@@ -125,6 +125,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
             notifyDataSetChanged();
         }
     };
+
+    public static ArrayList<Note> getListNotes(){
+        return listNotes;
+    }
 
     /**
      * Crea un nuevo viewHolder adaptado a las necesidades a mostrar.

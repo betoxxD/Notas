@@ -93,7 +93,7 @@ public class SelectorNotesFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getActivity(), NotesActivity.class);
-                        intent.putExtra("id", getNotes().get(rvDdata.getChildAdapterPosition(view)).getId());
+                        intent.putExtra("id", getNotesForSearch().get(rvDdata.getChildAdapterPosition(view)).getId());
                         startActivity(intent);
                     }
                 }
@@ -110,6 +110,12 @@ public class SelectorNotesFragment extends Fragment {
         ArrayList<Note> notes = new ArrayList<>();
         DaoNotes daoReminders = new DaoNotes(getActivity().getApplicationContext());
         notes = daoReminders.getAllNotes();
+        return notes;
+    }
+
+    private ArrayList<Note> getNotesForSearch() {
+        ArrayList<Note> notes = new ArrayList<>();
+        notes = NotesAdapter.getListNotes();
         return notes;
     }
 }

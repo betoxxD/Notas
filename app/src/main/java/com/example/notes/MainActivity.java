@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
@@ -89,8 +90,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                SelectorNotesFragment.notesAdapter.getFilter().filter(newText);
-                SelectorRemindersFragment.remindersAdapter.getFilter().filter(newText);
+                try {
+                    SelectorNotesFragment.notesAdapter.getFilter().filter(newText);
+                }catch (Exception ex){
+                    Log.e("No funca", "La app no funca.");
+                }
+                try {
+                    SelectorRemindersFragment.remindersAdapter.getFilter().filter(newText);
+                }catch (Exception ex){
+                    Log.e("No funca", "La app no funca.");
+                }
                 return false;
             }
         });
