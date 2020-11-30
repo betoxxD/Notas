@@ -29,12 +29,10 @@ import java.util.ArrayList;
  */
 public class SelectorNotesFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private RecyclerView rvDdata;
@@ -53,7 +51,6 @@ public class SelectorNotesFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment SelectorNotesFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static SelectorNotesFragment newInstance(String param1, String param2) {
         SelectorNotesFragment fragment = new SelectorNotesFragment();
         Bundle args = new Bundle();
@@ -63,6 +60,10 @@ public class SelectorNotesFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Obtiene los parámetros transferidos.
+     * @param savedInstanceState Bundle que permite el intercambio de datos.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +73,15 @@ public class SelectorNotesFragment extends Fragment {
         }
     }
 
+    /**
+     * Crea la interfaz del fragmento, además define el método onClick, permitiendo abrir la
+     * actividad NotesActivity al cliquear cualquier nota, mándando un ID para poder mostrar la información en
+     * aquella actividad.
+     * @param inflater (Proporcionado por el sistema).
+     * @param container (Proporcionado por el sistema).
+     * @param savedInstanceState (Proporcionado por el sistema).
+     * @return View del fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,6 +107,10 @@ public class SelectorNotesFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Obtiene la lista de notas.
+     * @return Lista de notas.
+     */
     private ArrayList<Note> getNotes() {
         ArrayList<Note> notes = new ArrayList<>();
         DaoNotes daoReminders = new DaoNotes(getActivity().getApplicationContext());

@@ -25,11 +25,12 @@ import java.util.ArrayList;
 public class NotesFragment extends Fragment {
 
     private NotesViewModel notesViewModel;
-    private RecyclerView rvDdata;
-    private GridLayoutManager layoutManager;
-    private NotesAdapter notesAdapter;
     private SelectorNotesFragment selectorFragment;
 
+    /**
+     * Crea e infla el fragmento de notas.
+     * @param savedInstanceState Bundle que permite la comunicación con otros fragmentos.
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,9 @@ public class NotesFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Actualiza el fragmento con los nuevos elementos agregados.
+     */
     @Override
     public void onResume() {
         super.onResume();
