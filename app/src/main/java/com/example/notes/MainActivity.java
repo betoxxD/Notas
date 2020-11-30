@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.example.notes.ui.NotesActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,10 +29,13 @@ import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    ArrayAdapter<String> arrayAdapter;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        listView = findViewById(R.id.list_view_search);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

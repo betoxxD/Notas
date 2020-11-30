@@ -87,8 +87,6 @@ public class SelectorRemindersFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_selector_reminders, container, false);
         rvDdata = (RecyclerView) v.findViewById(R.id.fragment_reminder_selector_RecyclerView);
-        layoutManager = new GridLayoutManager(getActivity(), 2);
-        rvDdata.setLayoutManager(layoutManager);
         ArrayList<Reminders> reminders = new ArrayList<>();
         reminders = getReminders();
         remindersAdapter = new RemindersAdapter(getActivity(), reminders);

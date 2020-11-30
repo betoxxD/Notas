@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.notes.SelectorNotesFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.example.notes.ui.AutofitRecyclerView
         android:id="@+id/fragment_note_selector_RecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:columnWidth="170dp"
         android:layout_marginStart="1dp"
         android:layout_marginLeft="1dp"
         android:layout_marginTop="1dp"
