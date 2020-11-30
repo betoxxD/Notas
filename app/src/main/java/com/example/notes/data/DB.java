@@ -7,9 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class DB extends SQLiteOpenHelper {
+    // Base de datos
     public static final String DATABASE_NAME = "dbNotes";
     public static final int DATABASE_VERSION = 1;
-    // Notes table
+    // Tabla notas
     public static final String TABLE_NOTES_NAME = "notes";
     public static final String[] COLUMS_TABLENOTES = {
             "id", "title", "description", "isReminder", "finishDate"
@@ -23,7 +24,7 @@ public class DB extends SQLiteOpenHelper {
                     "   finishDate text\n" +
                     ");";
 
-    // remindersDate
+    // Tabla recordatorios
     public static final String TABLE_REMINDERS_DATE = "remindersDate";
     public static final String[] COLUMS_TABLEREMINDERSDATE = {
             "id", "idNote", "dateReminder"
@@ -36,7 +37,7 @@ public class DB extends SQLiteOpenHelper {
                     "   FOREIGN KEY(idNote) REFERENCES Notes(id)\n" +
                     " );";
 
-    // Images
+    // Tabla Images
     public static final String TABLE_IMAGES_NAME = "images";
     public static final String[] COLUMNS_TABLEIMAGES = {
             "id", "idNote", "srcImage"
@@ -49,7 +50,7 @@ public class DB extends SQLiteOpenHelper {
                     "  FOREIGN KEY(idNote) REFERENCES Notes(id)\n" +
                     ");";
 
-    // Videos
+    // Tabla Videos
     public static final String TABLE_VIDEOS_NAME = "videos";
     public static final String[] COLUMNS_TABLEVIDEOS = {
             "id", "idNote", "srcVideo"
@@ -62,7 +63,7 @@ public class DB extends SQLiteOpenHelper {
                     "  FOREIGN KEY(idNote) REFERENCES Notes(id)\n" +
                     ");";
 
-    // Recorders
+    // Tabla Recorders
     public static final String TABLE_RECORDERS_NAME = "recorders";
     public static final String[] COLUMNS_TABLERECORDERS = {
             "id", "idNote", "srcRecord"
@@ -77,13 +78,19 @@ public class DB extends SQLiteOpenHelper {
 
     Context context;
 
-    // DB creation
+    /**
+     * Creación de la base de datos
+     * @param context Contexto de la aplicación que lo ejecuta.
+     */
     public DB(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
 
-    // Place to execute te SQLite code
+    /**
+     * Ejecuta las tablas creadas anteriormente.
+     * @param db Base de datos donde se insertan.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SCRIPT_TABLE_NOTES);

@@ -14,12 +14,21 @@ public class DaoRecorders {
     DB db;
     SQLiteDatabase ad;
 
+    /**
+     * Constructor.
+     * @param ctx Contexto del Activity que lo ejecuta.
+     */
     public DaoRecorders(Context ctx) {
         this.context = ctx;
         db = new DB(ctx);
         ad = db.getWritableDatabase();
     }
 
+    /**
+     * Inserta una lista de direcciones que apuntan a archivos de grabación.
+     * @param id Id de la nota a la que corresponden.
+     * @param recorders Lista de direcciones.
+     */
     public void insertRecorder(long id, ArrayList<String> recorders) {
         ContentValues cv;
         for (int i = 0; i < recorders.size(); i++) {
@@ -30,6 +39,11 @@ public class DaoRecorders {
         }
     }
 
+    /**
+     * Obtiene todas las direcciones de archivos correspondientes a una nota.
+     * @param id Id de la nota a la que corresponden.
+     * @return Lista de direcciones.
+     */
     public ArrayList<String> getAll(long id) {
         ArrayList<String> lst = new ArrayList<>();
         Cursor cursor = ad.rawQuery("select * from " + DB.TABLE_RECORDERS_NAME + " where "+ DB.COLUMNS_TABLERECORDERS[1]  + " = ?", new String[]{String.valueOf(id)});

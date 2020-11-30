@@ -15,12 +15,21 @@ public class DaoNotes {
     DB db;
     SQLiteDatabase ad;
 
+    /**
+     * Constructor.
+     * @param ctx Contexto del Activity que lo invoca.
+     */
     public DaoNotes(Context ctx) {
         this.context = ctx;
         db = new DB(ctx);
         ad = db.getWritableDatabase();
     }
 
+    /**
+     * Inserta una nota.
+     * @param note La nota a insertar.
+     * @return ID de la nota en la base de datos.
+     */
     public long insertNote(Note note) {
         ContentValues cv = new ContentValues();
         cv.put(DB.COLUMS_TABLENOTES[1], note.getTitle());
@@ -29,6 +38,10 @@ public class DaoNotes {
         return ad.insert(DB.TABLE_NOTES_NAME, null, cv);
     }
 
+    /**
+     * Obtiene todas las notas de la base de datos.
+     * @return Lista de notas obtenidas de la base de datos.
+     */
     public ArrayList<Note> getAllNotes() {
         Cursor cursor = ad.rawQuery("select * from " + DB.TABLE_NOTES_NAME + " where isReminder = ?", new String[]{String.valueOf(0)});
         ArrayList<Note> notes = new ArrayList<>();
@@ -42,37 +55,11 @@ public class DaoNotes {
         return notes;
     }
 
-    public ArrayList<Note> getAll() {
-        ArrayList<Note> lst = new ArrayList<>();
-        Cursor cursor = ad.query(DB.TABLE_NOTES_NAME, DB.COLUMS_TABLENOTES, null, null, null, null, null, null);
-        if (cursor.getCount() >= 0) {
-            while (cursor.moveToNext()) {
-                lst.add(new Note(
-                        cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3)
-                ));
-            }
-        }
-        return lst;
-    }
-
-    public Note getOneById(long id) {
-        Cursor cursor = null;
-        Note note = null;
-        cursor = ad.rawQuery("select * from " + DB.TABLE_NOTES_NAME + " where " + DB.COLUMS_TABLENOTES[0] + "=?",
-                new String[]{String.valueOf(id)});
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                note = new Note(
-                        cursor.getInt(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getInt(3)
-                );
-            }
-        }
-        return note;
-    }
-
+    /**
+     * Actualiza una nota en la base de datos.
+     * @param note Nota que será editada.
+     * @return Verdadero si la nota se actualizó, falso si no.
+     */
     public boolean update(Note note) {
         ContentValues cv = new ContentValues();
         cv.put(DB.COLUMS_TABLENOTES[1], note.getTitle());
@@ -84,9 +71,5 @@ public class DaoNotes {
                 DB.TABLE_NOTES_NAME, cv, "id=?",
                 new String[]{String.valueOf(note.getId())}
         ) > 0;
-    }
-
-    public boolean delete(long id) {
-        return ad.delete(DB.TABLE_NOTES_NAME, "id=?", new String[]{String.valueOf(id)}) > 0;
     }
 }

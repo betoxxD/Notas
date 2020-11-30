@@ -16,12 +16,21 @@ public class DaoImages {
     DB db;
     SQLiteDatabase ad;
 
+    /**
+     * Constructor.
+     * @param ctx Contexto de la aplicación
+     */
     public DaoImages(Context ctx) {
         this.context = ctx;
         db = new DB(ctx);
         ad = db.getWritableDatabase();
     }
 
+    /**
+     * Inserta una lista de imágenes a la base de datos.
+     * @param id Id de la nota a la que pertenecen las imágenes.
+     * @param images Objeto imagen que trae la ruta donde se encuentra, y que es la que se guarda.
+     */
     public void insertImage(long id, ArrayList<Image> images) {
         ContentValues cv;
         for (int i = 0; i < images.size(); i++) {
@@ -32,6 +41,11 @@ public class DaoImages {
         }
     }
 
+    /**
+     * Obtiene todas las imágenes que coincidan con el id que recibe.
+     * @param id Id de la nota.
+     * @return Lista de imágenes.
+     */
     public ArrayList<Image> getAll(long id) {
         ArrayList<Image> lst = new ArrayList<>();
         Image image;
