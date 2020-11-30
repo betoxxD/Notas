@@ -25,14 +25,26 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.View
     private LayoutInflater inflater;
     private View.OnClickListener onClickListener;
 
+    /**
+     * Se integra la función de clic.
+     * @param onClickListener Función clic personalizada.
+     */
     public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
+    /**
+     * Constructor vacío, necesario en un adaptador.
+     */
     public RemindersAdapter() {
-        // Required empty public constructor
+
     }
 
+    /**
+     * Función que se ejecuta para cada elemento de la lista. Establece los datos que una nota lleva.
+     * @param holder Holder al que se le agregan los datos (Proporcionado por el sistema).
+     * @param position Posición de la lista (Proporcionado por el sistema).
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Reminders reminder = listReminders.get(position);
@@ -41,11 +53,21 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.View
         holder.date.setText(reminder.getFinishDate());
     }
 
+    /**
+     * Obtiene la cantidad de objetos en la lista.
+     * @return Cantidad de objetos en la ista.
+     */
     @Override
     public int getItemCount() {
         return listReminders.size();
     }
 
+    /**
+     * Infla la interfaz reminder_selector y le asigna sus propiedades.
+     * @param parent (Proporcionado por el sistema).
+     * @param viewType (Proporcionado por el sistema).
+     * @return El viewHolder con las opciones asignadas.
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -54,12 +76,20 @@ public class RemindersAdapter extends RecyclerView.Adapter<RemindersAdapter.View
         return new ViewHolder(v);
     }
 
+    /**
+     * Construye la clase obteniendo el contexto de la aplicación, y la lista de recordatorios que va a manejar.
+     * @param context Contexto del Activiy que lo invoca.
+     * @param listNotes Lista de notas que serán agregadas.
+     */
     public RemindersAdapter(Context context, ArrayList<Reminders> listReminders) {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.listReminders = listReminders;
         this.context = context;
     }
 
+    /**
+     * Crea un nuevo viewHolder adaptado a las necesidades a mostrar.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final CardView cardView;
         private final ConstraintLayout constraintLayout;
