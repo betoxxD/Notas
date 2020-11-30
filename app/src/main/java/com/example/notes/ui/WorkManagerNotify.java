@@ -19,10 +19,23 @@ import com.example.notes.R;
 import java.util.concurrent.TimeUnit;
 
 public class WorkManagerNotify extends Worker {
+
+    /**
+     * Constructor.
+     * @param context (Proporcionado por el sistema).
+     * @param workerParams (Proporcionado por el sistema).
+     */
     public WorkManagerNotify(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 
+    /**
+     * Procesa la información para la notificación, para posteriormente programar una tarea que muestre
+     * una notificación.
+     * @param duration Tiempo que aparecerá la notificación en aparecer.
+     * @param data Contenido de la notificación (Título y contenido).
+     * @param tag Identificador de la notificación para la tarea.
+     */
     public static void saveNotification(long duration, Data data, String tag) {
         OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(WorkManagerNotify.class)
                 .setInitialDelay(duration, TimeUnit.MILLISECONDS).addTag(tag).setInputData(data).build();
@@ -30,6 +43,11 @@ public class WorkManagerNotify extends Worker {
         instance.enqueue(oneTimeWorkRequest);
     }
 
+    /**
+     * Se ejecuta cuando el tiempo asignado se haya cumplido. Manda llamar al método notify pra mostrar
+     * la notificación, dándole los valores obtenidos en el método saveNotification.
+     * @return
+     */
     @NonNull
     @Override
     public Result doWork() {
@@ -41,6 +59,13 @@ public class WorkManagerNotify extends Worker {
     }
 
 
+    /**
+     * Crea y muestra la notificación. Para Android Oreo en adelante, es necesario generar un Id para
+     * poder ser registrado (Ya lo hace el código).
+     * @param title Título que la notificación mostrará.
+     * @param content Contenido de la notificación.
+     * @param id ID de la notificación
+     */
     private void notify(String title, String content, int id) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library

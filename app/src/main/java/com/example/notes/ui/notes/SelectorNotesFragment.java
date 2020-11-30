@@ -11,14 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.notes.NotesActivity;
+import com.example.notes.ui.NotesActivity;
 import com.example.notes.R;
 import com.example.notes.data.DaoNotes;
-import com.example.notes.data.DaoReminders;
 import com.example.notes.models.Note;
-import com.example.notes.models.Reminders;
 import com.example.notes.ui.adapters.NotesAdapter;
-import com.example.notes.ui.adapters.RemindersAdapter;
 
 import java.util.ArrayList;
 

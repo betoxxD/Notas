@@ -14,6 +14,11 @@ import java.io.File;
 
 public class ImageViewActivity extends AppCompatActivity {
 
+    /**
+     * Inicializa esta actividad, obtiene la dirección de la imagen enviada por el Activity notes
+     * y la carga en la imageView.
+     * @param savedInstanceState (Proporcionado por el sistema).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

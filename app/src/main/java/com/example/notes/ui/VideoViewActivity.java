@@ -20,6 +20,11 @@ public class VideoViewActivity extends AppCompatActivity {
     MediaSessionCompat mediaSession;
     PlaybackStateCompat.Builder stateBuilder;
 
+    /**
+     * Inicializa los elementos del activity, obtiene el URI que apunta a un video enviado por el
+     * ActivityNotes y lo carga en un videoView.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

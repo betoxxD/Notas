@@ -1,4 +1,4 @@
-package com.example.notes;
+package com.example.notes.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.notes.R;
 import com.example.notes.models.Image;
 
 import java.io.File;
@@ -44,6 +45,12 @@ public class RecordActivity extends AppCompatActivity {
     private String [] permissions = {Manifest.permission.RECORD_AUDIO};
     private String currentRecordPath;
 
+    /**
+     * Solicita permiso para grabar audio, si no se concede, se cierra el activity.
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -56,6 +63,11 @@ public class RecordActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Comienza a grabar o termina la grabación dependiendo del valor que recibe. Lo hace llamando a los métodos
+     * correspondientes.
+     * @param start
+     */
     private void onRecord(boolean start) {
         if (start) {
             startRecording();
@@ -64,6 +76,11 @@ public class RecordActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Reproduce o para la reproducción dependiendo del valor boleano. Lo hace llamando a los métodos
+     * correspondientes.
+     * @param start
+     */
     private void onPlay(boolean start) {
         if (start) {
             startPlaying();
@@ -72,6 +89,9 @@ public class RecordActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Comienza la reproducción del audio, obteniendo la dirección de la grabación.
+     */
     private void startPlaying() {
         player = new MediaPlayer();
         try {
@@ -83,11 +103,17 @@ public class RecordActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Detiene la reproducción
+     */
     private void stopPlaying() {
         player.release();
         player = null;
     }
 
+    /**
+     * Configura y comienza a grabar.
+     */
     private void startRecording() {
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -104,12 +130,18 @@ public class RecordActivity extends AppCompatActivity {
         recorder.start();
     }
 
+    /**
+     * Para la grabación.
+     */
     private void stopRecording() {
         recorder.stop();
         recorder.release();
         recorder = null;
     }
 
+    /**
+     * Libera la memoria
+     */
     @Override
     public void onStop() {
         super.onStop();
@@ -124,6 +156,13 @@ public class RecordActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que permite copiar un archivo a otro. Funciona para copiar el audio del cache a un audio
+     * permanente.
+     * @param src Ruta del caché donde se encuentra el audio
+     * @return Un nuevo archivo guardado como permanente.
+     * @throws IOException
+     */
     public File copy(File src) throws IOException {
         File dst = createNewRecordFile();
         InputStream in = new FileInputStream(src);
@@ -145,11 +184,21 @@ public class RecordActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Guarda el archivo del caché.
+     * @return Archivo del caché almacenao en un File.
+     * @throws IOException
+     */
     private File createRecordFile() throws IOException {
         File record = new File(fileName);
         return record;
     }
 
+    /**
+     * Crea un nuevo archivo, que será donde se almacena el archivo de audio si se guarda.
+     * @return Un nuevo archivo con la nueva ruta.
+     * @throws IOException
+     */
     private File createNewRecordFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -166,6 +215,10 @@ public class RecordActivity extends AppCompatActivity {
         return record;
     }
 
+    /**
+     * Inicializa los componentes, y les da comportamiento a los botones.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,4 +1,4 @@
-package com.example.notes;
+package com.example.notes.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -43,6 +42,7 @@ import android.widget.TableRow;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.notes.R;
 import com.example.notes.data.DaoImages;
 import com.example.notes.data.DaoNotes;
 import com.example.notes.data.DaoRecorders;
@@ -51,13 +51,9 @@ import com.example.notes.data.DaoVideos;
 import com.example.notes.models.Image;
 import com.example.notes.models.Note;
 import com.example.notes.models.Reminders;
-import com.example.notes.ui.ImageViewActivity;
-import com.example.notes.ui.VideoViewActivity;
-import com.example.notes.ui.WorkManagerNotify;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
@@ -67,7 +63,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -125,6 +120,10 @@ public class NotesActivity extends AppCompatActivity {
     private int idrecordOld;
 
 
+    /**
+     * Carga todos los componentes necesarios para el Activity Actual
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,6 +163,8 @@ public class NotesActivity extends AppCompatActivity {
         bottomAppBar = findViewById(R.id.bottomAppBarNotes);
         bottomAppBar.replaceMenu(R.menu.menu_bottom_notes);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar_notes);
+        // Asignar el action bar personalizado para este activity y configurarlo para que muestre
+        // la flecha de regreso.
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -175,6 +176,7 @@ public class NotesActivity extends AppCompatActivity {
                 finish();
             }
         });
+        // Termina asignación de action bar
         bottomAppBarDefinition();
         chipDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,11 +186,10 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
+    /**
+     * Ocurre cuando se presiona la tecla de retroceso, agrega llama al método de agregar nota y
+     * finaliza la actividad.
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -196,6 +197,12 @@ public class NotesActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Scede cuando se crean las opciones del menú. Verifica si es una nueva nota, si lo es, quita la
+     * opción de eliminar, en caso contrario no hace nada.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -208,6 +215,14 @@ public class NotesActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Se ejecuta cada que una actividad que esta llamó, se cierra. Si la requisición fue de tomar
+     * una foto, ejecuta el método makeImageView, si la requisición fue de un video, makeVideoView y
+     * si es de audios, makeRecordView
+     * @param requestCode El código que solicitó la apertura.
+     * @param resultCode Resultado de la apertura.
+     * @param data Los datos que son recibidos del Activity que se cerró.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -242,6 +257,11 @@ public class NotesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Muestra un TimePickerDialog y obtiene la fecha elegida, colocándola en el botón correspondiente a
+     * la hora.
+     * @param v
+     */
     public void showTimePickerDialog(View v) {
         final Calendar calendar = Calendar.getInstance();
         final SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm", Locale.US);
@@ -258,6 +278,10 @@ public class NotesActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    /**
+     * Muestra un calendarPicker, la fecha optenida la coloca en el botón la fecha obtenida.
+     * @param v
+     */
     public void showDatePickerDialog(View v) {
         final Calendar calendar = Calendar.getInstance();
         final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy", Locale.US);
@@ -275,6 +299,11 @@ public class NotesActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    /**
+     * Inicia un Intent encargado de abrir la cámara. Si se pudo crear bien se crea un nuevo archivo
+     * encargado de almacenar la foto y posterior a esto, obtiene mediante un provider un URI, el cual permite
+     * almacenar la foto.
+     */
     public void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -297,6 +326,14 @@ public class NotesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Crea un imageView que almacenará una miniatura de la foto tomada, la va a agregar al tableLayout
+     * especial para imágenes. Además, le da formato y tamaño a la imagen para que se muestre de la manera correcta.
+     * Finalmente, agrega el método onClick a cada imageView para que cuando se de clic sobre este, abra un nuevo
+     * Activity para mostrar la foto con detalle.
+     * @param srcImage Dirección donde se encuentra almacenada la imagen.
+     * @param isNew Es imagen nueva, verdadero si se acaba de tomar, falso si se sacó de la base de datos.
+     */
     private void makeImageView(String srcImage, boolean isNew) {
         int dimensionInDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics());
         // Get the dimensions of the bitmap
@@ -357,6 +394,14 @@ public class NotesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Crea un imageView que almacenará una representación del video tomado, la va a agregar al tableLayout
+     * especial para videos. Además, le da tamaño al imageView para que se muestre de la manera correcta.
+     * Finalmente, agrega el método onClick a cada imageView para que cuando se de clic sobre este, abra un nuevo
+     * Activity para mostrar el video con detalle.
+     * @param srcVideo URI del video.
+     * @param isNew Es video nuevo, verdadero si se acaba de tomar, falso si se sacó de la base de datos.
+     */
     private void makeVideoView(String srcVideo, boolean isNew) {
         if (isNew) {
             videoViewNew = new ImageView(this);
@@ -395,6 +440,14 @@ public class NotesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Crea un imageView que almacenará una representación del audio grabado, la va a agregar al tableLayout
+     * especial para grabaciones. Además, le da tamaño al imageView para que se muestre de la manera correcta.
+     * Finalmente, agrega el método onClick a cada imageView para que cuando se de clic sobre este, reproduzca
+     * el audio almacenado.
+     * @param srcRecord Dirección de donde está almacenado el audio.
+     * @param isNew Es audio nuevo, verdadero si se acaba de tomar, falso si se sacó de la base de datos.
+     */
     private void makeRecordView(String srcRecord, boolean isNew) {
         if (isNew) {
             recordViewNew = new ImageView(this);
@@ -487,6 +540,10 @@ public class NotesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Define la navegación ubicada en la parte inferior. Crea los menús, el segundo menú es creado
+     * con el fragmento BottomSheetNavigationFragment. Agrega comportamiento a los items del menú.
+     */
     private void bottomAppBarDefinition() {
         //find id
         bottomAppBar = findViewById(R.id.bottomAppBarNotes);
@@ -538,7 +595,10 @@ public class NotesActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Crea un un Dialog Personalizado. Lo obtiene de dialog_custom_layout.xml que le da definición a la interfaz.
+     * Además, le da comportamiento a los botones.
+     */
     private void showCustomDialog() {
         AlertDialog.Builder alertDialogDateChooser = new AlertDialog.Builder(NotesActivity.this);
         View customView = LayoutInflater.from(NotesActivity.this).inflate(R.layout.dialog_custom_layout, null);
@@ -594,11 +654,16 @@ public class NotesActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Agrega una nota a la base de datos. Si el título o el contenido están vacíos, no almacena nada.
+     * Además, manda almacenar las fotos, los videos y los audios grabados.
+     */
     private void addNote() {
         long idInserted;
         String title = tieTitle.getText().toString();
         String content = etContent.getText().toString();
         Intent intent = new Intent();
+        //Sucede si No tiene texto el título o el contenido, cancela el guardado.
         if (title.isEmpty() || title == null || title.matches("^[ \n\r]+$") || content.isEmpty() || content == null || title.matches("^[ \n\r]+$")) {
             Toast.makeText(NotesActivity.this, "Acción cancelada", Toast.LENGTH_SHORT).show();
             deleteImages();
@@ -606,7 +671,9 @@ public class NotesActivity extends AppCompatActivity {
             finish();
         } else {
             if (id == -1) {
+                // Sucede si es una nota nueva
                 if (isReminder) {
+                    // Si es un recordatorio
                     Reminders reminder;
                     reminder = new Reminders(title, content, 1, btnDate.getText() + ". " + btnTime.getText());
                     idInserted = daoReminders.insertReminder(reminder);
@@ -828,6 +895,9 @@ public class NotesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Solicita permiso para almacenar y leer archivos.
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void validatePermission() {
 
@@ -858,6 +928,14 @@ public class NotesActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Sucede cuando se acciona alguna opción de algún permiso. Si se le da permiso, se establece la
+     * variable hasResult como true, en caso contrario, muestra un mensaje de que se desabilitará la función
+     * de grabar un video.
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -876,6 +954,9 @@ public class NotesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Abre el RecordActivity.
+     */
     public void openRecordActivity() {
         Intent intent = new Intent(NotesActivity.this, RecordActivity.class);
         startActivityForResult(intent, RECORD_ACTIVITY_RESULT);

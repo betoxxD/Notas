@@ -1,26 +1,15 @@
-package com.example.notes;
+package com.example.notes.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
-import com.example.notes.ui.ImageViewActivity;
+import com.example.notes.R;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -31,6 +20,13 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
     private static boolean hasPermission;
     private static MenuItem menuVideo;
 
+    /**
+     * Retorna una nueva instancia de esta clase. Además, guarda una instancia de NotesActivity y recibe
+     * si la aplicación tiene permiso para manejar archivos.
+     * @param notesActivity1 Instancia para ejecutar funciones de NotesActivity desde este fragmento.
+     * @param permission Verdadero si el usuario tiene permiso para editar archivos (Necesario para activar o desactivar función).
+     * @return Retorna una instancia de este Fragmento.
+     */
     public static BottomSheetNavigationFragment newInstance(NotesActivity notesActivity1, boolean permission) {
         Bundle args = new Bundle();
         notesActivity = notesActivity1;
@@ -44,7 +40,6 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
 
     //Bottom Sheet Callback
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
-
         @Override
         public void onStateChanged(@NonNull View bottomSheet, int newState) {
             if (newState == BottomSheetBehavior.STATE_HIDDEN) {
@@ -69,13 +64,14 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
 
         dialog.setContentView(contentView);
 
+        // Revisa si hay permisos, si no hay, oculta la grabación de videos.
         NavigationView navigationView = contentView.findViewById(R.id.navigation_view_notes);
         if(!hasPermission) {
             navigationView.getMenu().findItem(R.id.notes_navigation_Tvideo).setVisible(false);
         }else {
             navigationView.getMenu().findItem(R.id.notes_navigation_Tvideo).setVisible(true);
         }
-        //implement navigation menu item click event
+        //implementa el clic de los items.
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -103,10 +99,4 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
     }
-
-    /**
-     *
-     */
-
-
 }
