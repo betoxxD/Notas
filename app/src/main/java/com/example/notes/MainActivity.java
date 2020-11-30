@@ -9,18 +9,12 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 
-import com.example.notes.ui.pikers.DatePickerFragment;
-import com.example.notes.ui.pikers.TimePickerFragment;
-import com.example.notes.ui.reminders.RemindersFragment;
-import com.example.notes.ui.reminders.SelectorRemindersFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;

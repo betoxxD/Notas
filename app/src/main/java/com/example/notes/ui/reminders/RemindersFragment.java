@@ -19,6 +19,10 @@ public class RemindersFragment extends Fragment {
 
     SelectorRemindersFragment selectorFragment;
 
+    /**
+     * Carga contenedor_pequenio_reminders en el fragmento actual.
+     * @param savedInstanceState (Proporcionado por el sistema).
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +32,13 @@ public class RemindersFragment extends Fragment {
 
     }
 
+    /**
+     * Infla este fragmento.
+     * @param inflater (Proporcionado por el sistema).
+     * @param container (Proporcionado por el sistema).
+     * @param savedInstanceState (Proporcionado por el sistema).
+     * @return (Proporcionado por el sistema).
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         remindersViewModel =
@@ -38,6 +49,9 @@ public class RemindersFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Actualiza el fragmento para mostrar los nuevos recordatorios.
+     */
     @Override
     public void onResume() {
         super.onResume();

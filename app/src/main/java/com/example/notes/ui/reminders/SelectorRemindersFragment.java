@@ -26,7 +26,6 @@ import java.util.ArrayList;
  */
 public class SelectorRemindersFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -35,10 +34,12 @@ public class SelectorRemindersFragment extends Fragment {
     private GridLayoutManager layoutManager;
     private RemindersAdapter remindersAdapter;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
+    /**
+     * Constructor vacío, necesario.
+     */
     public SelectorRemindersFragment() {
         // Required empty public constructor
     }
@@ -51,7 +52,6 @@ public class SelectorRemindersFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment SelectorRemindersFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static SelectorRemindersFragment newInstance(String param1, String param2) {
         SelectorRemindersFragment fragment = new SelectorRemindersFragment();
         Bundle args = new Bundle();
@@ -61,6 +61,10 @@ public class SelectorRemindersFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * (Proporcionado por el sistema)
+     * @param savedInstanceState (Por el sistema)
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +74,14 @@ public class SelectorRemindersFragment extends Fragment {
         }
     }
 
+    /**
+     * Crea el view e infla el selector reminder, además le agrega la función on clic, la cual abre
+     * el Notesactivity, mándando el id para poder obtener su información en ese activity.
+     * @param inflater (Proporcionado por el sistema).
+     * @param container (Proporcionado por el sistema).
+     * @param savedInstanceState (Proporcionado por el sistema).
+     * @return El view del fragment inflado.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,6 +106,10 @@ public class SelectorRemindersFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Obtiene la lista de recordatorios de la base de datos.
+     * @return Lista de recordatorios.
+     */
     private ArrayList<Reminders> getReminders() {
         ArrayList<Reminders> reminders = new ArrayList<>();
         DaoReminders daoReminders = new DaoReminders(getActivity().getApplicationContext());

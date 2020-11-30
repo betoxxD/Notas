@@ -12,6 +12,9 @@ public class RemindersViewModel extends ViewModel {
 
     private MutableLiveData<ArrayList<Reminders>> mAlReminders;
 
+    /**
+     * Proporcionado por el sistema.
+     */
     public RemindersViewModel() {
         ArrayList<String> fechas = new ArrayList<>();
         ArrayList<Reminders> reminders = new ArrayList<>();
@@ -19,6 +22,10 @@ public class RemindersViewModel extends ViewModel {
         mAlReminders.setValue(reminders);
     }
 
+    /**
+     * Proporcionado por el sistema.
+     * @return Proporcionado por el sistema.
+     */
     public LiveData<ArrayList<Reminders>> getList() {
         return mAlReminders;
     }
